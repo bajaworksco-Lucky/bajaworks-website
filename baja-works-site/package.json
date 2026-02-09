@@ -1,8 +1,0 @@
-{
-  "name": "site",
-  "private": true,
-  "version": "1.0.0",
-  "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp -R index.html dist/ && (cp -R assets dist/ 2>/dev/null || true) && (cp -R css dist/ 2>/dev/null || true) && (cp -R images dist/ 2>/dev/null || true) && (cp -R js dist/ 2>/dev/null || true)"
-  }
-}
