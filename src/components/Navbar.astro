@@ -1,0 +1,46 @@
+---
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/shop", label: "Shop" },
+  { href: "/house", label: "House" },
+  { href: "/garden", label: "Garden" },
+  { href: "/pets", label: "Pets" },
+  { href: "/merch", label: "Merch" },
+  { href: "/candles", label: "Candles" }
+];
+
+const currentPath = Astro.url.pathname;
+const isActive = (href) => (href === "/" ? currentPath === "/" : currentPath.startsWith(href));
+---
+
+<header style="position:sticky;top:0;z-index:50;background:rgba(11,11,15,.75);backdrop-filter: blur(14px);border-bottom:1px solid var(--border);">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:.2px;">
+      <span style="display:inline-flex;width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,#fff,rgba(255,255,255,.25));"></span>
+      Baja Works Co.
+    </a>
+
+    <nav style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+      {links.map(l => (
+        <a
+          href={l.href}
+          aria-current={isActive(l.href) ? "page" : undefined}
+          style={`padding:8px 10px;border-radius:999px;border:1px solid ${isActive(l.href) ? "rgba(255,255,255,.22)" : "transparent"};
+                 background:${isActive(l.href) ? "rgba(255,255,255,.06)" : "transparent"};
+                 color:${isActive(l.href) ? "var(--text)" : "var(--muted)"};
+                 transition:all .15s ease;`}
+          onmouseover="this.style.color='var(--text)'; this.style.background='rgba(255,255,255,.05)';"
+          onmouseout={`this.style.color='${isActive(l.href) ? "var(--text)" : "var(--muted)"}'; this.style.background='${isActive(l.href) ? "rgba(255,255,255,.06)" : "transparent"}';`}
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <div style="display:none;gap:10px;" class="desktop-cta">
+      <a href="/shop" style="padding:10px 14px;border-radius:999px;background:#fff;color:#000;font-weight:600;">
+        Shop
+      </a>
+    </div>
+  </div>
+</header>
