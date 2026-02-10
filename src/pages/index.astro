@@ -1,13 +1,53 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
 ---
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Baja Works Co.</title>
-  </head>
-  <body>
-    <h1>Baja Works Co.</h1>
-    <p>Astro build test page.</p>
-  </body>
-</html>
+
+<BaseLayout
+  title="Baja Works Co. | Product Design & Fabrication Studio"
+  description="Modern home, plant, pet, and lifestyle goods made with CNC, laser engraving, 3D printing, and sublimation."
+>
+  <Navbar />
+
+  <main class="page">
+    <div class="container">
+      <section style="padding:56px 0 26px;">
+        <p style="margin:0;color:var(--muted);">Product design & fabrication studio</p>
+        <h1 style="margin:10px 0 10px;font-size:44px;line-height:1.05;letter-spacing:-.6px;">
+          Modern goods.<br />Built in-house.
+        </h1>
+        <p style="margin:0;max-width:58ch;color:var(--muted);font-size:16px;line-height:1.6;">
+          Baja Works Co. designs and makes functional home, plant, pet, and lifestyle products using wood & metal CNC,
+          laser engraving, 3D printing, and sublimation.
+        </p>
+
+        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="/shop" style="padding:12px 16px;border-radius:999px;background:#fff;color:#000;font-weight:650;">
+            Shop
+          </a>
+          <a href="mailto:bajaworksco@gmail.com" style="padding:12px 16px;border-radius:999px;border:1px solid var(--border);color:var(--text);">
+            Custom Order
+          </a>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
+          <div style="color:var(--muted);font-size:13px;">Capabilities</div>
+          <div style="margin-top:6px;font-weight:650;">Wood CNC • Metal CNC</div>
+        </div>
+        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
+          <div style="color:var(--muted);font-size:13px;">Detail</div>
+          <div style="margin-top:6px;font-weight:650;">Laser engraving • 3D printing</div>
+        </div>
+        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
+          <div style="color:var(--muted);font-size:13px;">Merch</div>
+          <div style="margin-top:6px;font-weight:650;">Sublimation shirts • Totes</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
