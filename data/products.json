@@ -1,0 +1,4 @@
+[
+  { "id": "coaster-001", "name": "Topo Coaster Set", "price": 2800, "category": "house", "image": "/images/coasters.jpg" },
+  { "id": "tag-001", "name": "Metal Pet Tag", "price": 1800, "category": "pets", "image": "/images/tag.jpg" }
+]
