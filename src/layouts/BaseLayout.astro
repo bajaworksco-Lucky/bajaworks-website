@@ -1,0 +1,30 @@
+---
+const { title = "Baja Works Co.", description = "Product design & fabrication studio." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      :root{
+        --bg:#0b0b0f; --panel:rgba(255,255,255,.04);
+        --text:#f5f5f7; --muted:rgba(245,245,247,.7);
+        --border:rgba(255,255,255,.10);
+      }
+      *{box-sizing:border-box}
+      body{margin:0;background:var(--bg);color:var(--text);
+        font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+      a{color:inherit;text-decoration:none}
+      .container{max-width:1120px;margin:0 auto;padding:0 20px}
+      .page{padding:28px 0 80px}
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
