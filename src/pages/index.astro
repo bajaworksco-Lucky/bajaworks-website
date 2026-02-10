@@ -1,67 +1,13 @@
 ---
-import Navbar from "../components/Navbar.astro";
-import Footer from "../components/Footer.astro";
-import Hero from "../components/Hero.tsx";
-import ProductGrid from "../components/ProductGrid.tsx";
-import products from "../data/products.json";
-const newest = products.slice(0, 6);
 ---
-
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Baja Works Co. | Product Design & Fabrication Studio</title>
-    <meta name="description" content="Modern home, plant, pet, and lifestyle goods made with CNC, laser engraving, 3D printing, and sublimation." />
+    <title>Baja Works Co.</title>
   </head>
-
-  <body class="bg-black text-white">
-    <Navbar />
-
-    <!-- Animated hero (React island) -->
-    <Hero client:load />
-
-    <main class="mx-auto max-w-6xl px-6">
-      <section class="mt-16 grid gap-6 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 p-6">
-          <p class="text-white/70">Wood CNC</p>
-          <p class="mt-2 text-lg">Clean, precise, functional builds.</p>
-        </div>
-        <div class="rounded-2xl border border-white/10 p-6">
-          <p class="text-white/70">Metal CNC</p>
-          <p class="mt-2 text-lg">Hardware, tags, fixtures, components.</p>
-        </div>
-        <div class="rounded-2xl border border-white/10 p-6">
-          <p class="text-white/70">Laser + 3D + Sublimation</p>
-          <p class="mt-2 text-lg">Detail, customization, fast iteration.</p>
-        </div>
-      </section>
-
-      <section class="mt-20">
-        <div class="flex items-end justify-between gap-6">
-          <div>
-            <h2 class="text-2xl font-semibold">Newest drops</h2>
-            <p class="mt-2 text-white/70">Small-batch products and custom-ready designs.</p>
-          </div>
-          <a class="text-white/80 hover:text-white" href="/shop">Shop all →</a>
-        </div>
-
-        <ProductGrid client:load products={newest} />
-      </section>
-
-      <section class="mt-24 rounded-3xl border border-white/10 p-10">
-        <h2 class="text-2xl font-semibold">Categories</h2>
-        <div class="mt-6 grid gap-4 md:grid-cols-3">
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/house">The House →</a>
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/garden">Garden & Plants →</a>
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/pets">Pets →</a>
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/candles">Candles →</a>
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/merch">Merch →</a>
-          <a class="rounded-2xl border border-white/10 p-6 hover:border-white/25" href="/shop">Shop →</a>
-        </div>
-      </section>
-    </main>
-
-    <Footer />
+  <body>
+    <h1>Baja Works Co.</h1>
+    <p>Astro build test page.</p>
   </body>
 </html>
