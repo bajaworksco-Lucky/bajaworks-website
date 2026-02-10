@@ -1,8 +1,24 @@
 {
-  "name": "site",
+  "name": "bajaworksco-site",
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp -R index.html dist/ && (cp -R assets dist/ 2>/dev/null || true) && (cp -R css dist/ 2>/dev/null || true) && (cp -R images dist/ 2>/dev/null || true) && (cp -R js dist/ 2>/dev/null || true)"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "framer-motion": "^11.0.0",
+    "stripe": "^14.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/react": "^3.0.0",
+    "@astrojs/tailwind": "^5.0.0",
+    "tailwindcss": "^3.0.0",
+    "postcss": "^8.0.0",
+    "autoprefixer": "^10.0.0"
   }
 }
