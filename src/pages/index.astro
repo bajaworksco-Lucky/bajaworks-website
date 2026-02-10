@@ -2,52 +2,298 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+
+// Optional: products (newest/trending). If you don't have products.json yet,
+// comment these two lines out and the page still works.
+import products from "../data/products.json";
+
+const newest = Array.isArray(products) ? products.slice(0, 6) : [];
+const trending = Array.isArray(products) ? products.slice(0, 6) : [];
+
+const categories = [
+  { href: "/house", title: "The House", desc: "Shelves, organizers, coasters, décor." },
+  { href: "/garden", title: "Garden & Plants", desc: "Stands, markers, propagation, planters." },
+  { href: "/pets", title: "Pets", desc: "Tags, bowls, collars, bandanas." },
+  { href: "/candles", title: "Candles", desc: "Ritual sets, holders, lids, gift boxes." },
+  { href: "/merch", title: "Merch", desc: "Shirts, totes, drops, bundles." },
+  { href: "/shop", title: "Shop All", desc: "Newest, trending, and best sellers." }
+];
 ---
 
 <BaseLayout
   title="Baja Works Co. | Product Design & Fabrication Studio"
-  description="Modern home, plant, pet, and lifestyle goods made with CNC, laser engraving, 3D printing, and sublimation."
+  description="Baja Works Co. designs and fabricates modern home, plant, pet, and lifestyle goods using CNC machining, laser engraving, 3D printing, and sublimation."
 >
   <Navbar />
 
-  <main class="page">
-    <div class="container">
-      <section style="padding:56px 0 26px;">
-        <p style="margin:0;color:var(--muted);">Product design & fabrication studio</p>
-        <h1 style="margin:10px 0 10px;font-size:44px;line-height:1.05;letter-spacing:-.6px;">
-          Modern goods.<br />Built in-house.
-        </h1>
-        <p style="margin:0;max-width:58ch;color:var(--muted);font-size:16px;line-height:1.6;">
-          Baja Works Co. designs and makes functional home, plant, pet, and lifestyle products using wood & metal CNC,
-          laser engraving, 3D printing, and sublimation.
-        </p>
+  <style>
+    .page { padding: 32px 0 86px; }
+    .grid { display:grid; gap:16px; }
+    .card {
+      border:1px solid var(--border);
+      background: var(--panel);
+      border-radius: 22px;
+      padding: 18px;
+    }
+    .muted { color: var(--muted); }
+    .kicker { letter-spacing:.12em; text-transform:uppercase; font-size:12px; color: var(--muted); }
+    .h1 { margin: 10px 0 12px; font-size: clamp(38px, 5vw, 64px); line-height: 1.03; letter-spacing:-.6px; }
+    .lead { margin: 0; max-width: 64ch; font-size: 16px; line-height:1.65; color: var(--muted); }
+    .btns { margin-top: 18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .btnPrimary {
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 12px 16px; border-radius:999px;
+      background:#fff; color:#000; font-weight:700;
+      border:1px solid rgba(255,255,255,.2);
+      transition: transform .18s ease, opacity .18s ease;
+    }
+    .btnGhost {
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 12px 16px; border-radius:999px;
+      border:1px solid var(--border); color: var(--text); font-weight:650;
+      background: rgba(255,255,255,.03);
+      transition: transform .18s ease, background .18s ease;
+    }
+    .btnPrimary:hover { transform: translateY(-1px); opacity:.95; }
+    .btnGhost:hover { transform: translateY(-1px); background: rgba(255,255,255,.06); }
 
-        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="/shop" style="padding:12px 16px;border-radius:999px;background:#fff;color:#000;font-weight:650;">
-            Shop
-          </a>
-          <a href="mailto:bajaworksco@gmail.com" style="padding:12px 16px;border-radius:999px;border:1px solid var(--border);color:var(--text);">
-            Custom Order
-          </a>
-        </div>
-      </section>
+    /* hero background glow */
+    .heroWrap { position: relative; overflow:hidden; border-bottom:1px solid var(--border); }
+    .heroGlow {
+      pointer-events:none; position:absolute; inset:-40px;
+      background:
+        radial-gradient(900px 420px at 18% 25%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(900px 420px at 82% 30%, rgba(255,255,255,.08), transparent 60%),
+        radial-gradient(700px 340px at 55% 90%, rgba(255,255,255,.06), transparent 60%);
+      filter: blur(0px);
+      opacity: .9;
+    }
 
-      <section style="margin-top:18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
-        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
-          <div style="color:var(--muted);font-size:13px;">Capabilities</div>
-          <div style="margin-top:6px;font-weight:650;">Wood CNC • Metal CNC</div>
-        </div>
-        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
-          <div style="color:var(--muted);font-size:13px;">Detail</div>
-          <div style="margin-top:6px;font-weight:650;">Laser engraving • 3D printing</div>
-        </div>
-        <div style="padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--panel);">
-          <div style="color:var(--muted);font-size:13px;">Merch</div>
-          <div style="margin-top:6px;font-weight:650;">Sublimation shirts • Totes</div>
-        </div>
-      </section>
-    </div>
-  </main>
+    /* subtle reveal animations (no JS) */
+    .reveal { opacity: 0; transform: translateY(10px); animation: up .7s ease forwards; }
+    .reveal.d2 { animation-delay: .08s; }
+    .reveal.d3 { animation-delay: .16s; }
+    .reveal.d4 { animation-delay: .24s; }
+    @keyframes up { to { opacity:1; transform: translateY(0);} }
+
+    .pillRow { display:flex; gap:10px; flex-wrap:wrap; margin-top: 18px; }
+    .pill {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stats { margin-top: 22px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .statTitle { font-size: 13px; color: var(--muted); }
+    .statValue { margin-top: 7px; font-weight: 750; }
+
+    .sectionHead { display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-top: 44px; }
+    .sectionHead h2 { margin:0; font-size: 22px; letter-spacing: -.2px; }
+    .sectionHead a { color: var(--muted); }
+    .sectionHead a:hover { color: var(--text); }
+
+    .productGrid { margin-top: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .productCard { padding: 16px; border-radius: 22px; border:1px solid var(--border); background: rgba(255,255,255,.03); transition: transform .18s ease, border-color .18s ease; }
+    .productCard:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
+    .productName { margin: 10px 0 6px; font-weight: 720; }
+    .productMeta { margin: 0; color: var(--muted); font-size: 13px; display:flex; justify-content:space-between; gap:10px; }
+    .imgPh {
+      height: 140px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(700px 220px at 20% 30%, rgba(255,255,255,.10), transparent 60%),
+        rgba(255,255,255,.02);
+    }
+
+    .cats { margin-top: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .catCard { padding: 18px; border-radius: 22px; border:1px solid var(--border); background: rgba(255,255,255,.03); transition: transform .18s ease, border-color .18s ease; }
+    .catCard:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
+    .catTitle { margin: 0; font-weight: 750; }
+    .catDesc { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height:1.5; }
+
+    .cta {
+      margin-top: 54px;
+      padding: 22px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(900px 340px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
+        rgba(255,255,255,.03);
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .cta h3 { margin:0; font-size: 20px; letter-spacing:-.2px; }
+    .cta p { margin:6px 0 0; color: var(--muted); max-width: 62ch; line-height:1.55; }
+  </style>
+
+  <!-- HERO -->
+  <div class="heroWrap">
+    <div class="heroGlow"></div>
+    <main class="page">
+      <div class="container">
+        <section style="padding: 34px 0 10px;">
+          <p class="kicker reveal">Product design & fabrication studio</p>
+
+          <h1 class="h1 reveal d2">
+            Baja Works Co.<br />
+            <span style="color:var(--muted)">Modern goods. Built in-house.</span>
+          </h1>
+
+          <p class="lead reveal d3">
+            We design and make functional products for the home, garden, pets, and lifestyle — combining
+            <strong style="color:var(--text)"> wood & metal CNC</strong>, laser engraving, 3D printing, and sublimation
+            into clean, durable designs.
+          </p>
+
+          <div class="btns reveal d4">
+            <a class="btnPrimary" href="/shop">Shop Now →</a>
+            <a class="btnGhost" href="mailto:bajaworksco@gmail.com">Request a Custom Order</a>
+          </div>
+
+          <div class="pillRow reveal d4">
+            <span class="pill">Wood CNC</span>
+            <span class="pill">Metal CNC</span>
+            <span class="pill">Laser Engraving</span>
+            <span class="pill">3D Printing</span>
+            <span class="pill">Sublimation</span>
+          </div>
+
+          <div class="grid stats">
+            <div class="card reveal d2">
+              <div class="statTitle">What we do</div>
+              <div class="statValue">Design → Prototype → Produce</div>
+            </div>
+            <div class="card reveal d3">
+              <div class="statTitle">Best for</div>
+              <div class="statValue">Small-batch + Custom</div>
+            </div>
+            <div class="card reveal d4">
+              <div class="statTitle">Style</div>
+              <div class="statValue">Clean • Minimal • Functional</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NEWEST -->
+        <section>
+          <div class="sectionHead">
+            <div>
+              <h2>Newest drops</h2>
+              <div class="muted" style="margin-top:6px;">Fresh builds and small-batch releases.</div>
+            </div>
+            <a href="/shop">View all →</a>
+          </div>
+
+          <div class="grid productGrid">
+            {newest.length ? (
+              newest.map((p) => (
+                <a class="productCard" href="/shop">
+                  <div class="imgPh"></div>
+                  <div class="productName">{p.name ?? "Product name"}</div>
+                  <div class="productMeta">
+                    <span>{p.category ?? "category"}</span>
+                    <span>
+                      {typeof p.price === "number" ? `$${(p.price / 100).toFixed(2)}` : ""}
+                    </span>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <>
+                <div class="productCard">
+                  <div class="imgPh"></div>
+                  <div class="productName">Add products.json</div>
+                  <p class="muted" style="margin:0;font-size:13px;line-height:1.5;">
+                    This section will auto-populate from <code style="color:var(--text)">src/data/products.json</code>.
+                  </p>
+                </div>
+                <div class="productCard"><div class="imgPh"></div><div class="productName">Placeholder</div><p class="muted" style="margin:0;font-size:13px;">New items will show here.</p></div>
+                <div class="productCard"><div class="imgPh"></div><div class="productName">Placeholder</div><p class="muted" style="margin:0;font-size:13px;">New items will show here.</p></div>
+              </>
+            )}
+          </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section>
+          <div class="sectionHead">
+            <div>
+              <h2>Browse by category</h2>
+              <div class="muted" style="margin-top:6px;">Everything we make, organized by your use case.</div>
+            </div>
+          </div>
+
+          <div class="grid cats">
+            {categories.map((c) => (
+              <a class="catCard" href={c.href}>
+                <h3 class="catTitle">{c.title} →</h3>
+                <p class="catDesc">{c.desc}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <!-- TRENDING -->
+        <section>
+          <div class="sectionHead">
+            <div>
+              <h2>Trending</h2>
+              <div class="muted" style="margin-top:6px;">What people are saving and asking about lately.</div>
+            </div>
+            <a href="/shop">Shop trending →</a>
+          </div>
+
+          <div class="grid productGrid">
+            {trending.length ? (
+              trending.map((p) => (
+                <a class="productCard" href="/shop">
+                  <div class="imgPh"></div>
+                  <div class="productName">{p.name ?? "Product name"}</div>
+                  <div class="productMeta">
+                    <span>{p.category ?? "category"}</span>
+                    <span>
+                      {typeof p.price === "number" ? `$${(p.price / 100).toFixed(2)}` : ""}
+                    </span>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <div class="productCard">
+                <div class="imgPh"></div>
+                <div class="productName">Trending will appear here</div>
+                <p class="muted" style="margin:0;font-size:13px;line-height:1.5;">
+                  Once products exist, we can sort by views/sales later (or manual “featured” picks).
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta">
+          <div>
+            <h3>Need something custom?</h3>
+            <p>
+              If you have an idea for a shelf, organizer, pet station, sign, or gift — we can prototype and build it.
+              Send a quick message with dimensions and what you want it to do.
+            </p>
+          </div>
+          <div class="btns" style="margin-top:0;">
+            <a class="btnPrimary" href="mailto:bajaworksco@gmail.com">Email Us →</a>
+            <a class="btnGhost" href="/shop">Browse Products</a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
 
   <Footer />
 </BaseLayout>
