@@ -1,55 +1,25 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Your Business Name</title>
-  <meta name="description" content="Product design & fabrication studio making modern home, pet, and lifestyle goods." />
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 64px 20px; }
-    .card { border: 1px solid #e7e7e7; border-radius: 16px; padding: 22px; margin-top: 18px; }
-    .btns a { display: inline-block; margin: 10px 10px 0 0; padding: 10px 14px; border: 1px solid #111; border-radius: 999px; text-decoration: none; color: #111; }
-    .muted { color: #666; }
-    ul { padding-left: 18px; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <h1>Your Business Name</h1>
-    <p class="muted">Product design & fabrication studio.</p>
-
-    <div class="card">
-      <h2>What I make</h2>
-      <ul>
-        <li>Home goods (shelves, organizers, coasters)</li>
-        <li>Plant & garden accessories</li>
-        <li>Pet goods (tags, bowls, accessories)</li>
-        <li>Merch (shirts, totes)</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Capabilities</h2>
-      <ul>
-        <li>Wood CNC • Metal CNC</li>
-        <li>Laser engraving • 3D printing</li>
-        <li>Sublimation apparel</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Links</h2>
-      <div class="btns">
-        <a href="https://instagram.com/">Instagram</a>
-        <a href="https://etsy.com/">Shop</a>
-        <a href="mailto:you@example.com">Email</a>
-      </div>
-    </div>
-
-    <p class="muted" style="margin-top: 26px;">© <span id="y"></span> Your Business Name</p>
-  </div>
-
-  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
-</body>
-</html>
+/src
+  /pages
+    index.astro
+    house.astro
+    garden.astro
+    pets.astro
+    merch.astro
+    candles.astro
+    shop.astro
+  /components
+    Navbar.astro
+    Footer.astro
+    Hero.tsx
+    SectionReveal.tsx
+    ProductGrid.tsx
+    AddToCartButton.tsx
+  /data
+    products.json
+/functions
+  /api
+    create-checkout-session.js
+astro.config.mjs
+package.json
+tailwind.config.cjs
+postcss.config.cjs
