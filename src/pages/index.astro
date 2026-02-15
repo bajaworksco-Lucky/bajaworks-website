@@ -1,299 +1,616 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Navbar from "../components/Navbar.astro";
-import Footer from "../components/Footer.astro";
-
-// Optional: products (newest/trending). If you don't have products.json yet,
-// comment these two lines out and the page still works.
-import products from "../data/products.json";
-
-const newest = Array.isArray(products) ? products.slice(0, 6) : [];
-const trending = Array.isArray(products) ? products.slice(0, 6) : [];
-
-const categories = [
-  { href: "/house", title: "The House", desc: "Shelves, organizers, coasters, décor." },
-  { href: "/garden", title: "Garden & Plants", desc: "Stands, markers, propagation, planters." },
-  { href: "/pets", title: "Pets", desc: "Tags, bowls, collars, bandanas." },
-  { href: "/candles", title: "Candles", desc: "Ritual sets, holders, lids, gift boxes." },
-  { href: "/merch", title: "Merch", desc: "Shirts, totes, drops, bundles." },
-  { href: "/shop", title: "Shop All", desc: "Newest, trending, and best sellers." }
-];
 ---
 
 <BaseLayout
-  title="Baja Works Co. | Product Design & Fabrication Studio"
-  description="Baja Works Co. designs and fabricates modern home, plant, pet, and lifestyle goods using CNC machining, laser engraving, 3D printing, and sublimation."
+  title="BAJA WORKS CO."
+  description="Product design & fabrication studio — home goods, garden, pets, merch."
 >
-  <Navbar />
-
   <style>
-    .page { padding: 32px 0 86px; }
-    .grid { display:grid; gap:16px; }
-    .card {
-      border:1px solid var(--border);
-      background: var(--panel);
-      border-radius: 22px;
-      padding: 18px;
+    /* ===== Theme (warm minimal like your reference) ===== */
+    :root{
+      --bg: #fbf7f2;
+      --ink: #1a1a1a;
+      --muted: rgba(26,26,26,.62);
+      --line: rgba(26,26,26,.14);
+      --card: rgba(255,255,255,.72);
+      --accent: #e68666;     /* warm peach band */
+      --accent2: #d4b49b;    /* tan overlays */
+      --radius: 22px;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
     }
-    .muted { color: var(--muted); }
-    .kicker { letter-spacing:.12em; text-transform:uppercase; font-size:12px; color: var(--muted); }
-    .h1 { margin: 10px 0 12px; font-size: clamp(38px, 5vw, 64px); line-height: 1.03; letter-spacing:-.6px; }
-    .lead { margin: 0; max-width: 64ch; font-size: 16px; line-height:1.65; color: var(--muted); }
-    .btns { margin-top: 18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .btnPrimary {
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 12px 16px; border-radius:999px;
-      background:#fff; color:#000; font-weight:700;
-      border:1px solid rgba(255,255,255,.2);
-      transition: transform .18s ease, opacity .18s ease;
-    }
-    .btnGhost {
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 12px 16px; border-radius:999px;
-      border:1px solid var(--border); color: var(--text); font-weight:650;
-      background: rgba(255,255,255,.03);
-      transition: transform .18s ease, background .18s ease;
-    }
-    .btnPrimary:hover { transform: translateY(-1px); opacity:.95; }
-    .btnGhost:hover { transform: translateY(-1px); background: rgba(255,255,255,.06); }
 
-    /* hero background glow */
-    .heroWrap { position: relative; overflow:hidden; border-bottom:1px solid var(--border); }
-    .heroGlow {
-      pointer-events:none; position:absolute; inset:-40px;
+    body{ background: var(--bg); color: var(--ink); }
+    a{ color: inherit; }
+    .container{ max-width: 1120px; margin: 0 auto; padding: 0 22px; }
+
+    /* ===== Header ===== */
+    .header{
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(251,247,242,.86);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav{
+      height: 74px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 12px; min-width: 210px;
+    }
+    .logoMark{
+      width: 36px; height: 36px; border-radius: 10px;
       background:
-        radial-gradient(900px 420px at 18% 25%, rgba(255,255,255,.10), transparent 60%),
-        radial-gradient(900px 420px at 82% 30%, rgba(255,255,255,.08), transparent 60%),
-        radial-gradient(700px 340px at 55% 90%, rgba(255,255,255,.06), transparent 60%);
-      filter: blur(0px);
-      opacity: .9;
+        linear-gradient(135deg, rgba(26,26,26,.95), rgba(26,26,26,.25));
+      box-shadow: 0 10px 20px rgba(0,0,0,.10);
     }
-
-    /* subtle reveal animations (no JS) */
-    .reveal { opacity: 0; transform: translateY(10px); animation: up .7s ease forwards; }
-    .reveal.d2 { animation-delay: .08s; }
-    .reveal.d3 { animation-delay: .16s; }
-    .reveal.d4 { animation-delay: .24s; }
-    @keyframes up { to { opacity:1; transform: translateY(0);} }
-
-    .pillRow { display:flex; gap:10px; flex-wrap:wrap; margin-top: 18px; }
-    .pill {
+    .brandName{
+      font-weight: 800;
+      letter-spacing: .18em;
+      font-size: 12px;
+      line-height: 1.1;
+    }
+    .brandName span{
+      display:block;
+      letter-spacing: .16em;
+      font-weight: 650;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+    .navLinks{
+      display:flex; align-items:center; gap: 8px;
+      flex-wrap: wrap; justify-content: flex-end;
+    }
+    .navLinks a{
       padding: 10px 12px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
+      border: 1px solid transparent;
+      color: rgba(26,26,26,.75);
+      transition: background .16s ease, border-color .16s ease, transform .16s ease, color .16s ease;
       font-size: 13px;
     }
-
-    .stats { margin-top: 22px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .statTitle { font-size: 13px; color: var(--muted); }
-    .statValue { margin-top: 7px; font-weight: 750; }
-
-    .sectionHead { display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-top: 44px; }
-    .sectionHead h2 { margin:0; font-size: 22px; letter-spacing: -.2px; }
-    .sectionHead a { color: var(--muted); }
-    .sectionHead a:hover { color: var(--text); }
-
-    .productGrid { margin-top: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .productCard { padding: 16px; border-radius: 22px; border:1px solid var(--border); background: rgba(255,255,255,.03); transition: transform .18s ease, border-color .18s ease; }
-    .productCard:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
-    .productName { margin: 10px 0 6px; font-weight: 720; }
-    .productMeta { margin: 0; color: var(--muted); font-size: 13px; display:flex; justify-content:space-between; gap:10px; }
-    .imgPh {
-      height: 140px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(700px 220px at 20% 30%, rgba(255,255,255,.10), transparent 60%),
-        rgba(255,255,255,.02);
+    .navLinks a:hover{
+      background: rgba(26,26,26,.05);
+      border-color: rgba(26,26,26,.10);
+      transform: translateY(-1px);
+      color: rgba(26,26,26,.92);
+    }
+    .cartPill{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(26,26,26,.16);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 10px 25px rgba(0,0,0,.06);
+      font-weight: 650;
+      color: rgba(26,26,26,.90);
+    }
+    .cartDot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(230,134,102,.18);
     }
 
-    .cats { margin-top: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    .catCard { padding: 18px; border-radius: 22px; border:1px solid var(--border); background: rgba(255,255,255,.03); transition: transform .18s ease, border-color .18s ease; }
-    .catCard:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
-    .catTitle { margin: 0; font-weight: 750; }
-    .catDesc { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height:1.5; }
-
-    .cta {
-      margin-top: 54px;
-      padding: 22px;
-      border-radius: 26px;
-      border: 1px solid var(--border);
+    /* ===== Hero ===== */
+    .hero{
+      position: relative;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .heroMedia{
+      height: min(540px, 62vh);
       background:
-        radial-gradient(900px 340px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
-        rgba(255,255,255,.03);
-      display:flex;
-      flex-wrap:wrap;
-      gap:16px;
+        linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05)),
+        radial-gradient(900px 380px at 20% 30%, rgba(255,255,255,.16), transparent 60%),
+        url("/images/hero.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: saturate(1.04);
+    }
+    /* fallback if no image */
+    @supports not (background: url("/images/hero.jpg")) {
+      .heroMedia{ background: linear-gradient(135deg, #d8c2ae, #f0e0d2); }
+    }
+    .heroOverlay{
+      position:absolute; inset: 0;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none;
+    }
+    .heroBadge{
+      text-align:center;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+      padding: 18px 22px;
+      border-radius: 18px;
+      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 35px rgba(0,0,0,.18);
+    }
+    .heroBadge .mark{
+      width: 52px; height: 52px;
+      margin: 0 auto 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.88);
+      mask: linear-gradient(#000, #000); /* keeps it simple */
+    }
+    .heroBadge h1{
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: .16em;
+      font-weight: 800;
+    }
+    .heroBadge p{
+      margin: 10px 0 0;
+      max-width: 52ch;
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ===== Section defaults ===== */
+    .section{ padding: 54px 0; }
+    .sectionTitle{
+      margin: 0 0 22px;
+      font-size: clamp(34px, 4.2vw, 54px);
+      letter-spacing: -.02em;
+      font-weight: 760;
+    }
+    .muted{ color: var(--muted); }
+
+    /* ===== Intro split ===== */
+    .introGrid{
+      display:grid;
+      gap: 26px;
+      grid-template-columns: 1.2fr 1fr;
       align-items:center;
-      justify-content:space-between;
     }
-    .cta h3 { margin:0; font-size: 20px; letter-spacing:-.2px; }
-    .cta p { margin:6px 0 0; color: var(--muted); max-width: 62ch; line-height:1.55; }
+    .photo{
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(900px 260px at 20% 30%, rgba(255,255,255,.22), transparent 60%),
+        url("/images/intro.jpg");
+      background-size: cover;
+      background-position:center;
+      min-height: 280px;
+      box-shadow: var(--shadow);
+    }
+    .copyCard{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .copyCard h3{ margin: 0 0 10px; font-size: 18px; letter-spacing: -.01em; }
+    .copyCard p{ margin: 0; line-height: 1.7; color: var(--muted); font-size: 14px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(26,26,26,.18);
+      background: rgba(255,255,255,.65);
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 14px;
+      transition: transform .16s ease, background .16s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.85); }
+
+    /* ===== Accent band features ===== */
+    .band{
+      background: var(--accent);
+      padding: 46px 0;
+      border-top: 1px solid rgba(0,0,0,.06);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .featureGrid{
+      display:grid; gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .feature{
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(26,26,26,.14);
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 210px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.08);
+      transition: transform .18s ease;
+    }
+    .feature:hover{ transform: translateY(-2px); }
+    .feature h4{ margin: 0; font-size: 16px; font-weight: 760; }
+    .feature p{ margin: 12px 0 0; color: rgba(26,26,26,.62); font-size: 13px; line-height: 1.6; }
+
+    /* ===== Events ===== */
+    .eventsGrid{
+      display:grid; gap: 16px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .eventCard{
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .eventCard:hover{ transform: translateY(-2px); border-color: rgba(26,26,26,.22); }
+    .eventImg{
+      height: 130px;
+      background:
+        radial-gradient(800px 220px at 20% 30%, rgba(255,255,255,.20), transparent 60%),
+        rgba(0,0,0,.04);
+      background-size: cover;
+      background-position: center;
+    }
+    .eventBody{ padding: 14px 14px 16px; }
+    .eventMeta{ font-size: 12px; color: rgba(26,26,26,.55); }
+    .eventTitle{ margin: 6px 0 6px; font-weight: 780; }
+    .eventLoc{ margin: 0; font-size: 12px; color: rgba(26,26,26,.58); }
+
+    /* ===== Banner section ===== */
+    .banner{
+      margin-top: 6px;
+      position: relative;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow:hidden;
+    }
+    .bannerMedia{
+      height: 280px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.08)),
+        url("/images/banner.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+    .bannerText{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center;
+      padding: 20px;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 10px 28px rgba(0,0,0,.35);
+      font-size: clamp(26px, 3.2vw, 40px);
+      font-weight: 780;
+      letter-spacing: -.01em;
+    }
+
+    /* ===== Stores/Locations ===== */
+    .locGrid{
+      display:grid; gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 18px;
+    }
+    .loc{
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .loc h4{ margin: 0 0 10px; font-size: 14px; letter-spacing:.12em; text-transform:uppercase; }
+    .loc p{ margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    /* ===== FAQ ===== */
+    .faqWrap{
+      display:grid; gap: 18px;
+      grid-template-columns: 1fr 1.2fr;
+      align-items:start;
+      margin-top: 12px;
+    }
+    .faqTitle{
+      font-size: clamp(30px, 3.6vw, 44px);
+      margin: 0;
+      font-weight: 780;
+      letter-spacing: -.02em;
+    }
+    details{
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.65);
+      padding: 14px 16px;
+      box-shadow: 0 12px 26px rgba(0,0,0,.06);
+    }
+    details + details{ margin-top: 12px; }
+    summary{
+      cursor:pointer;
+      font-weight: 760;
+      list-style:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details p{ margin: 10px 0 0; color: var(--muted); line-height: 1.65; font-size: 13px; }
+
+    /* ===== Footer ===== */
+    .footer{
+      background: #2f2f2f;
+      color: rgba(255,255,255,.78);
+      padding: 46px 0;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+    .footerGrid{
+      display:grid; gap: 18px;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      align-items:start;
+    }
+    .footerBrand{
+      display:flex; align-items:center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .footer .logoMark{ background: rgba(255,255,255,.90); }
+    .footer a{ color: rgba(255,255,255,.78); }
+    .footer a:hover{ color: rgba(255,255,255,.96); }
+
+    /* ===== Animations: scroll reveal ===== */
+    .reveal{
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.in{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 920px){
+      .introGrid{ grid-template-columns: 1fr; }
+      .featureGrid{ grid-template-columns: 1fr; }
+      .eventsGrid{ grid-template-columns: 1fr; }
+      .locGrid{ grid-template-columns: 1fr; }
+      .faqWrap{ grid-template-columns: 1fr; }
+      .footerGrid{ grid-template-columns: 1fr; }
+      .brand{ min-width: auto; }
+    }
   </style>
 
-  <!-- HERO -->
-  <div class="heroWrap">
-    <div class="heroGlow"></div>
-    <main class="page">
-      <div class="container">
-        <section style="padding: 34px 0 10px;">
-          <p class="kicker reveal">Product design & fabrication studio</p>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logoMark" aria-hidden="true"></div>
+        <div class="brandName">
+          BAJA WORKS CO.
+          <span>Design • Fabrication • Goods</span>
+        </div>
+      </div>
 
-          <h1 class="h1 reveal d2">
-            Baja Works Co.<br />
-            <span style="color:var(--muted)">Modern goods. Built in-house.</span>
-          </h1>
+      <nav class="navLinks" aria-label="Primary">
+        <a href="/threads">Threads</a>
+        <a href="/studio">Studio</a>
+        <a href="/casa">Casa</a>
+        <a href="/paws">Paws</a>
+        <a href="/cart" class="cartPill"><span class="cartDot"></span> Cart</a>
+      </nav>
+    </div>
+  </header>
 
-          <p class="lead reveal d3">
-            We design and make functional products for the home, garden, pets, and lifestyle — combining
-            <strong style="color:var(--text)"> wood & metal CNC</strong>, laser engraving, 3D printing, and sublimation
-            into clean, durable designs.
+  <!-- Hero -->
+  <section class="hero">
+    <div class="heroMedia"></div>
+    <div class="heroOverlay">
+      <div class="heroBadge reveal">
+        <div class="mark" aria-hidden="true"></div>
+        <h1>BAJA WORKS CO.</h1>
+        <p>Modern, functional goods — designed and built in-house using CNC, laser engraving, 3D printing, and sublimation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">Elevate your everyday</h2>
+
+      <div class="introGrid">
+        <div class="photo reveal" role="img" aria-label="Lifestyle product photo"></div>
+
+        <div class="copyCard reveal">
+          <h3>Built with intention</h3>
+          <p>
+            Baja Works Co. is a product design & fabrication studio. We make clean, durable pieces for
+            the <strong>home</strong>, the <strong>garden</strong>, <strong>pets</strong>, and everyday <strong>lifestyle</strong> —
+            with small-batch drops and custom builds.
           </p>
 
-          <div class="btns reveal d4">
-            <a class="btnPrimary" href="/shop">Shop Now →</a>
-            <a class="btnGhost" href="mailto:bajaworksco@gmail.com">Request a Custom Order</a>
-          </div>
+          <p style="margin-top:10px;">
+            Our capabilities include <strong>wood CNC</strong>, <strong>metal CNC</strong>, <strong>laser engraving</strong>,
+            <strong>3D printing</strong>, and <strong>sublimation</strong>.
+          </p>
 
-          <div class="pillRow reveal d4">
-            <span class="pill">Wood CNC</span>
-            <span class="pill">Metal CNC</span>
-            <span class="pill">Laser Engraving</span>
-            <span class="pill">3D Printing</span>
-            <span class="pill">Sublimation</span>
-          </div>
-
-          <div class="grid stats">
-            <div class="card reveal d2">
-              <div class="statTitle">What we do</div>
-              <div class="statValue">Design → Prototype → Produce</div>
-            </div>
-            <div class="card reveal d3">
-              <div class="statTitle">Best for</div>
-              <div class="statValue">Small-batch + Custom</div>
-            </div>
-            <div class="card reveal d4">
-              <div class="statTitle">Style</div>
-              <div class="statValue">Clean • Minimal • Functional</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- NEWEST -->
-        <section>
-          <div class="sectionHead">
-            <div>
-              <h2>Newest drops</h2>
-              <div class="muted" style="margin-top:6px;">Fresh builds and small-batch releases.</div>
-            </div>
-            <a href="/shop">View all →</a>
-          </div>
-
-          <div class="grid productGrid">
-            {newest.length ? (
-              newest.map((p) => (
-                <a class="productCard" href="/shop">
-                  <div class="imgPh"></div>
-                  <div class="productName">{p.name ?? "Product name"}</div>
-                  <div class="productMeta">
-                    <span>{p.category ?? "category"}</span>
-                    <span>
-                      {typeof p.price === "number" ? `$${(p.price / 100).toFixed(2)}` : ""}
-                    </span>
-                  </div>
-                </a>
-              ))
-            ) : (
-              <>
-                <div class="productCard">
-                  <div class="imgPh"></div>
-                  <div class="productName">Add products.json</div>
-                  <p class="muted" style="margin:0;font-size:13px;line-height:1.5;">
-                    This section will auto-populate from <code style="color:var(--text)">src/data/products.json</code>.
-                  </p>
-                </div>
-                <div class="productCard"><div class="imgPh"></div><div class="productName">Placeholder</div><p class="muted" style="margin:0;font-size:13px;">New items will show here.</p></div>
-                <div class="productCard"><div class="imgPh"></div><div class="productName">Placeholder</div><p class="muted" style="margin:0;font-size:13px;">New items will show here.</p></div>
-              </>
-            )}
-          </div>
-        </section>
-
-        <!-- CATEGORIES -->
-        <section>
-          <div class="sectionHead">
-            <div>
-              <h2>Browse by category</h2>
-              <div class="muted" style="margin-top:6px;">Everything we make, organized by your use case.</div>
-            </div>
-          </div>
-
-          <div class="grid cats">
-            {categories.map((c) => (
-              <a class="catCard" href={c.href}>
-                <h3 class="catTitle">{c.title} →</h3>
-                <p class="catDesc">{c.desc}</p>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <!-- TRENDING -->
-        <section>
-          <div class="sectionHead">
-            <div>
-              <h2>Trending</h2>
-              <div class="muted" style="margin-top:6px;">What people are saving and asking about lately.</div>
-            </div>
-            <a href="/shop">Shop trending →</a>
-          </div>
-
-          <div class="grid productGrid">
-            {trending.length ? (
-              trending.map((p) => (
-                <a class="productCard" href="/shop">
-                  <div class="imgPh"></div>
-                  <div class="productName">{p.name ?? "Product name"}</div>
-                  <div class="productMeta">
-                    <span>{p.category ?? "category"}</span>
-                    <span>
-                      {typeof p.price === "number" ? `$${(p.price / 100).toFixed(2)}` : ""}
-                    </span>
-                  </div>
-                </a>
-              ))
-            ) : (
-              <div class="productCard">
-                <div class="imgPh"></div>
-                <div class="productName">Trending will appear here</div>
-                <p class="muted" style="margin:0;font-size:13px;line-height:1.5;">
-                  Once products exist, we can sort by views/sales later (or manual “featured” picks).
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <!-- CTA -->
-        <section class="cta">
-          <div>
-            <h3>Need something custom?</h3>
-            <p>
-              If you have an idea for a shelf, organizer, pet station, sign, or gift — we can prototype and build it.
-              Send a quick message with dimensions and what you want it to do.
-            </p>
-          </div>
-          <div class="btns" style="margin-top:0;">
-            <a class="btnPrimary" href="mailto:bajaworksco@gmail.com">Email Us →</a>
-            <a class="btnGhost" href="/shop">Browse Products</a>
-          </div>
-        </section>
-
+          <a class="btn" href="/studio">Learn more</a>
+        </div>
       </div>
-    </main>
-  </div>
+    </div>
+  </section>
 
-  <Footer />
+  <!-- Feature band -->
+  <section class="band">
+    <div class="container">
+      <div class="featureGrid">
+        <div class="feature reveal">
+          <h4>Locally made</h4>
+          <p>Designed and produced in-house for consistent quality, fast iteration, and real craftsmanship.</p>
+        </div>
+        <div class="feature reveal">
+          <h4>Precision fabrication</h4>
+          <p>Digital design meets CNC + laser detail, producing clean edges, tight fit, and repeatable results.</p>
+        </div>
+        <div class="feature reveal">
+          <h4>Custom-ready</h4>
+          <p>Need a size, name, or material tweak? We can prototype fast and build to your exact use-case.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming events -->
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">Upcoming events</h2>
+
+      <div class="eventsGrid">
+        <article class="eventCard reveal">
+          <div class="eventImg" style='background-image:url("/images/event1.jpg")'></div>
+          <div class="eventBody">
+            <div class="eventMeta">Mar 10, 2026</div>
+            <div class="eventTitle">Community Market</div>
+            <p class="eventLoc">Imperial Valley • Pop-up booth</p>
+          </div>
+        </article>
+
+        <article class="eventCard reveal">
+          <div class="eventImg" style='background-image:url("/images/event2.jpg")'></div>
+          <div class="eventBody">
+            <div class="eventMeta">Apr 5, 2026</div>
+            <div class="eventTitle">Spring Drop</div>
+            <p class="eventLoc">Online release • Limited batch</p>
+          </div>
+        </article>
+
+        <article class="eventCard reveal">
+          <div class="eventImg" style='background-image:url("/images/event3.jpg")'></div>
+          <div class="eventBody">
+            <div class="eventMeta">May 2–3, 2026</div>
+            <div class="eventTitle">Grand Sale</div>
+            <p class="eventLoc">Studio specials • Custom discounts</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner (we can rename “Visit our stores” later) -->
+  <section class="banner">
+    <div class="bannerMedia"></div>
+    <div class="bannerText reveal">Visit our studio</div>
+  </section>
+
+  <!-- Locations / contact blocks -->
+  <section class="section">
+    <div class="container">
+      <div class="locGrid">
+        <div class="loc reveal">
+          <h4>Studio / Pickup</h4>
+          <p>
+            By appointment only<br/>
+            Imperial Valley, CA<br/>
+            Email: <a href="mailto:bajaworksco@gmail.com">bajaworksco@gmail.com</a>
+          </p>
+        </div>
+
+        <div class="loc reveal">
+          <h4>Hours</h4>
+          <p>
+            Mon–Fri: 6am–7pm<br/>
+            Sat: Pop-ups / events<br/>
+            Sun: Limited / restock planning
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="padding-top: 10px;">
+    <div class="container">
+      <div class="faqWrap">
+        <h2 class="faqTitle reveal">Frequently<br/>asked questions</h2>
+
+        <div>
+          <details class="reveal" open>
+            <summary>What’s your return policy?</summary>
+            <p>
+              For standard items: returns accepted within 7 days of delivery if unused and in original condition.
+              Custom items are final sale unless damaged on arrival.
+            </p>
+          </details>
+
+          <details class="reveal">
+            <summary>Do you do custom orders?</summary>
+            <p>
+              Yes — send an email with dimensions, material preference, and what you want it to do.
+              We’ll confirm pricing and timeline before production.
+            </p>
+          </details>
+
+          <details class="reveal">
+            <summary>How do I track my order?</summary>
+            <p>
+              Once shipped, you’ll receive a confirmation email with tracking.
+              Local pickup orders will receive an appointment message.
+            </p>
+          </details>
+
+          <details class="reveal">
+            <summary>Do you offer shipping?</summary>
+            <p>
+              Yes. We’ll start with U.S. shipping. Larger items may ship in separate packages.
+              (We’ll refine shipping rules when the shop pages are built.)
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footerGrid">
+        <div>
+          <div class="footerBrand">
+            <div class="logoMark" aria-hidden="true"></div>
+            <div style="font-weight:800; letter-spacing:.16em;">BAJA WORKS CO.</div>
+          </div>
+          <div style="color:rgba(255,255,255,.70); line-height:1.6; max-width:52ch;">
+            Design-led goods for the home, garden, pets, and lifestyle. Built in-house with CNC, laser, 3D printing, and sublimation.
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:760; margin-bottom:10px;">Contact</div>
+          <div style="line-height:1.9;">
+            <a href="mailto:bajaworksco@gmail.com">bajaworksco@gmail.com</a><br/>
+            Imperial Valley, CA<br/>
+            Pop-ups + small-batch drops
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:760; margin-bottom:10px;">Get social</div>
+          <div style="line-height:1.9;">
+            <a href="#">Instagram</a><br/>
+            <a href="/shop">Shop</a><br/>
+            <a href="/studio">Studio</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:22px; padding-top:18px; border-top:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.55); font-size:12px;">
+        © {new Date().getFullYear()} Baja Works Co. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple scroll reveal (smooth + lightweight)
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.14 });
+
+    els.forEach(el => io.observe(el));
+  </script>
 </BaseLayout>
