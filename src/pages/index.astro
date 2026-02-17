@@ -377,7 +377,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="logoMark" aria-hidden="true"></div>
         <div class="brandName">
           BAJA WORKS CO.
-          <span>Design • Fabrication • Goods</span>
         </div>
       </div>
 
@@ -398,7 +397,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <div class="heroBadge reveal">
         <div class="mark" aria-hidden="true"></div>
         <h1>BAJA WORKS CO.</h1>
-        <p>Modern, functional goods — designed and built in-house using CNC, laser engraving, 3D printing, and sublimation.</p>
+		  <h3>From Where We Came - To What We Build.</h3>
+        <p>Rooted in Baja heritage, shaped by American work ethic, and built into every piece we make - from concept to craft to your home.</p>
       </div>
     </div>
   </section>
@@ -415,14 +415,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <h3>Built with intention</h3>
           <p>
             Baja Works Co. is a product design & fabrication studio. We make clean, durable pieces for
-            the <strong>home</strong>, the <strong>garden</strong>, <strong>pets</strong>, and everyday <strong>lifestyle</strong> —
-            with small-batch drops and custom builds.
+            the <strong>home</strong>, the <strong>garden</strong>, <strong>pets</strong>, and everyday <strong>lifestyle.</strong>
           </p>
 
-          <p style="margin-top:10px;">
-            Our capabilities include <strong>wood CNC</strong>, <strong>metal CNC</strong>, <strong>laser engraving</strong>,
-            <strong>3D printing</strong>, and <strong>sublimation</strong>.
-          </p>
+          <p style="margin-top:10px;">&nbsp;
+           </p>
 
           <a class="btn" href="/studio">Learn more</a>
         </div>
@@ -430,25 +427,62 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </div>
   </section>
 
-  <!-- Feature band -->
-  <section class="band">
-    <div class="container">
-      <div class="featureGrid">
-        <div class="feature reveal">
-          <h4>Locally made</h4>
-          <p>Designed and produced in-house for consistent quality, fast iteration, and real craftsmanship.</p>
-        </div>
-        <div class="feature reveal">
-          <h4>Precision fabrication</h4>
-          <p>Digital design meets CNC + laser detail, producing clean edges, tight fit, and repeatable results.</p>
-        </div>
-        <div class="feature reveal">
-          <h4>Custom-ready</h4>
-          <p>Need a size, name, or material tweak? We can prototype fast and build to your exact use-case.</p>
-        </div>
-      </div>
+ <!-- Feature band -->
+<section class="band">
+  <div class="container">
+    <div class="bandHead reveal">
+      <h3>Explore the brands</h3>
+      <p>Four lanes — one studio. Built with pride, designed with intention.</p>
     </div>
-  </section>
+
+    <div class="featureGrid featureGrid4">
+      <a class="feature featureLink reveal" href="/threads">
+        <div>
+          <h4>Threads</h4>
+          <p>
+            Apparel & merch built for everyday wear — minimalist tees, hoodies, hats, and small-batch drops.
+            Clean fits, strong identity, Baja roots.
+          </p>
+        </div>
+        <span class="learnMore">Learn more →</span>
+      </a>
+
+      <a class="feature featureLink reveal" href="/studio">
+        <div>
+          <h4>Studio</h4>
+          <p>
+            Custom-made design work — posters, banners, signage, logos, stickers, decals, and event graphics.
+            We can also prototype and fabricate custom pieces.
+          </p>
+        </div>
+        <span class="learnMore">Learn more →</span>
+      </a>
+
+      <a class="feature featureLink reveal" href="/casa">
+        <div>
+          <h4>Casa</h4>
+          <p>
+            Home goods with a warm modern vibe — shelves, organizers, coasters, candle accessories, and
+            functional décor built to live with.
+          </p>
+        </div>
+        <span class="learnMore">Learn more →</span>
+      </a>
+
+      <a class="feature featureLink reveal" href="/paws">
+        <div>
+          <h4>Paws</h4>
+          <p>
+            Pet-ready goods — name tags, bowls, bandanas, collars, feeding stations,
+            and custom engraved pieces for your best friend.
+          </p>
+        </div>
+        <span class="learnMore">Learn more →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 
   <!-- Upcoming events -->
   <section class="section">
@@ -489,7 +523,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <!-- Banner (we can rename “Visit our stores” later) -->
   <section class="banner">
     <div class="bannerMedia"></div>
-    <div class="bannerText reveal">Visit our studio</div>
+    <div class="bannerText reveal">Contact Us</div>
   </section>
 
   <!-- Locations / contact blocks -->
@@ -497,10 +531,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="container">
       <div class="locGrid">
         <div class="loc reveal">
-          <h4>Studio / Pickup</h4>
+          <h4>Custom Request</h4>
           <p>
-            By appointment only<br/>
-            Imperial Valley, CA<br/>
+            Send Us a Message:<br/>
             Email: <a href="mailto:bajaworksco@gmail.com">bajaworksco@gmail.com</a>
           </p>
         </div>
@@ -508,9 +541,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="loc reveal">
           <h4>Hours</h4>
           <p>
-            Mon–Fri: 6am–7pm<br/>
-            Sat: Pop-ups / events<br/>
-            Sun: Limited / restock planning
+            Mon–Fri: 6am–5pm<br/>
+            Sat: 10am-5pm<br/>
+            Sun: Closed
           </p>
         </div>
       </div>
@@ -535,7 +568,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <details class="reveal">
             <summary>Do you do custom orders?</summary>
             <p>
-              Yes — send an email with dimensions, material preference, and what you want it to do.
+              Yes — send us an email with your project details and specifications.
               We’ll confirm pricing and timeline before production.
             </p>
           </details>
@@ -551,8 +584,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <details class="reveal">
             <summary>Do you offer shipping?</summary>
             <p>
-              Yes. We’ll start with U.S. shipping. Larger items may ship in separate packages.
-              (We’ll refine shipping rules when the shop pages are built.)
+              Yes — we primarily ship orders within the U.S. and Mexico. Shipping costs are calculated and listed at checkout based on the item and destination. Once your order ships, you’ll receive a confirmation email with tracking information.
             </p>
           </details>
         </div>
@@ -570,22 +602,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <div style="font-weight:800; letter-spacing:.16em;">BAJA WORKS CO.</div>
           </div>
           <div style="color:rgba(255,255,255,.70); line-height:1.6; max-width:52ch;">
-            Design-led goods for the home, garden, pets, and lifestyle. Built in-house with CNC, laser, 3D printing, and sublimation.
+            Design-led goods for the home, garden, pets, and lifestyle. Built in-house with care.
           </div>
         </div>
 
-        <div>
-          <div style="font-weight:760; margin-bottom:10px;">Contact</div>
-          <div style="line-height:1.9;">
-            <a href="mailto:bajaworksco@gmail.com">bajaworksco@gmail.com</a><br/>
-            Imperial Valley, CA<br/>
-            Pop-ups + small-batch drops
-          </div>
-        </div>
+
 
         <div>
-          <div style="font-weight:760; margin-bottom:10px;">Get social</div>
-          <div style="line-height:1.9;">
+          <div style="font-weight:760; margin-bottom:6px;">Contact</div>
+          <div style="line-height:1.4;">
+			<a href="mailto:bajaworksco@gmail.com">bajaworksco@gmail.com</a><br/>
             <a href="#">Instagram</a><br/>
             <a href="/shop">Shop</a><br/>
             <a href="/studio">Studio</a>
