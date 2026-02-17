@@ -1,11 +1,24 @@
+---
+const events = [
+  { date: 'Mar 10, 2026', title: 'Community Market', location: 'Imperial Valley • Pop-up booth', image: '/images/event1.jpg' },
+  { date: 'Apr 5, 2026', title: 'Spring Drop', location: 'Online release • Limited batch', image: '/images/event2.jpg' },
+  { date: 'May 2–3, 2026', title: 'Grand Sale', location: 'Studio specials • Custom discounts', image: '/images/event3.jpg' }
+];
+---
 <section class="section">
   <div class="container">
+    <h2 class="sectionTitle reveal">Upcoming events</h2>
     <div class="eventsGrid">
-      <article class="eventCard reveal eventCardSingle" aria-label="Official Launch on March 16th">
-        <div class="eventBody">
-          <p class="eventAnnouncement">Official Launch on March 16th.</p>
-        </div>
-      </article>
+      {events.map((event) => (
+        <article class="eventCard reveal">
+          <div class="eventImg" style={`background-image:url('${event.image}')`}></div>
+          <div class="eventBody">
+            <div class="eventMeta">{event.date}</div>
+            <div class="eventTitle">{event.title}</div>
+            <p class="eventLoc">{event.location}</p>
+          </div>
+        </article>
+      ))}
     </div>
   </div>
 </section>
