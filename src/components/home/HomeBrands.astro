@@ -1,0 +1,28 @@
+---
+const brands = [
+  { href: '/threads', title: 'Threads', body: 'Apparel & merch built for everyday wear — minimalist tees, hoodies, hats, and small-batch drops. Clean fits, strong identity, Baja roots.' },
+  { href: '/studio', title: 'Studio', body: 'Custom-made design work — posters, banners, signage, logos, stickers, decals, and event graphics. We can also prototype and fabricate custom pieces.' },
+  { href: '/casa', title: 'Casa', body: 'Home goods with a warm modern vibe — shelves, organizers, coasters, candle accessories, and functional décor built to live with.' },
+  { href: '/paws', title: 'Paws', body: 'Pet-ready goods — name tags, bowls, bandanas, collars, feeding stations, and custom engraved pieces for your best friend.' }
+];
+---
+<section class="band">
+  <div class="container">
+    <div class="bandHead reveal">
+      <h3>Explore the brands</h3>
+      <p>Four lanes — one studio. Built with pride, designed with intention.</p>
+    </div>
+
+    <div class="featureGrid">
+      {brands.map((brand) => (
+        <a class="feature featureLink reveal" href={brand.href}>
+          <div>
+            <h4>{brand.title}</h4>
+            <p>{brand.body}</p>
+          </div>
+          <span class="learnMore">Learn more →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
