@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHeader from '../components/home/HomeHeader.astro';
+import HomeContact from '../components/home/HomeContact.astro';
+import HomeFaq from '../components/home/HomeFaq.astro';
+import HomeFooter from '../components/home/HomeFooter.astro';
+import HomeRevealScript from '../components/home/HomeRevealScript.astro';
+import '../styles/home.css';
+---
+
+<BaseLayout
+  title="Threads | Baja Works Co."
+  description="Threads by Baja Works Co. — apparel and merch for everyday wear, minimalist tees, hoodies, hats and small-batch drops with Baja roots."
+>
+  <HomeHeader />
+  <section class="hero">
+    <div class="heroMedia"></div>
+    <div class="heroOverlay">
+      <div class="heroBadge reveal">
+        <h1>Threads</h1>
+        <h3>Wear Your Roots</h3>
+        <p>Apparel and merch built for everyday wear — minimalist tees, hoodies, hats, and small‑batch drops. Clean fits, strong identity, Baja roots.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">About Threads</h2>
+      <div class="introGrid">
+        <div class="copyCard reveal">
+          <h3>Design Philosophy</h3>
+          <p>Inspired by the rugged coastlines of Baja and the creative spirit of California, our Threads line blends comfort with character. We craft garments using durable fabrics and timeless silhouettes, focusing on quality over quantity. Every drop is intentional and limited.</p>
+          <p>From everyday tees and hoodies to hats and accessories, each piece carries our signature Baja roots and is made to feel good and last long.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">Shop Coming Soon</h2>
+      <p class="reveal">Our online shop will launch soon. Sign up for our newsletter or follow us on Instagram to catch the first drop of Threads apparel. For custom merch or bulk orders, please contact us.</p>
+    </div>
+  </section>
+
+  <HomeContact />
+  <HomeFaq />
+  <HomeFooter />
+  <HomeRevealScript />
+</BaseLayout>

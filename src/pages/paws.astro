@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHeader from '../components/home/HomeHeader.astro';
+import HomeContact from '../components/home/HomeContact.astro';
+import HomeFaq from '../components/home/HomeFaq.astro';
+import HomeFooter from '../components/home/HomeFooter.astro';
+import HomeRevealScript from '../components/home/HomeRevealScript.astro';
+import '../styles/home.css';
+---
+
+<BaseLayout
+  title="Paws | Baja Works Co."
+  description="Paws by Baja Works Co. — pet‑ready goods like name tags, bowls, bandanas, collars, feeding stations and custom engraved pieces for your best friend."
+>
+  <HomeHeader />
+  <section class="hero">
+    <div class="heroMedia"></div>
+    <div class="heroOverlay">
+      <div class="heroBadge reveal">
+        <h1>Paws</h1>
+        <h3>For Your Best Friend</h3>
+        <p>Pet‑ready goods — name tags, bowls, bandanas, collars, feeding stations, and custom engraved pieces for your best friend.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">About Paws</h2>
+      <div class="introGrid">
+        <div class="copyCard reveal">
+          <h3>Built for Companions</h3>
+          <p>The Paws line is inspired by our own furry friends. We focus on durable, pet‑safe materials and thoughtful designs that make life easier for both pets and owners. From adjustable collars and engraved tags to elevated feeding stations and cozy bandanas, each item is crafted to withstand daily adventures.</p>
+          <p>We also offer custom engraving so your pet’s name stands out. Because our companions deserve the same quality and care as everything else we make.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">Coming Soon</h2>
+      <p class="reveal">Our pet collection is in development. Join our mailing list for updates or contact us for bespoke pieces for your furry friend.</p>
+    </div>
+  </section>
+
+  <HomeContact />
+  <HomeFaq />
+  <HomeFooter />
+  <HomeRevealScript />
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHeader from '../components/home/HomeHeader.astro';
+import HomeContact from '../components/home/HomeContact.astro';
+import HomeFaq from '../components/home/HomeFaq.astro';
+import HomeFooter from '../components/home/HomeFooter.astro';
+import HomeRevealScript from '../components/home/HomeRevealScript.astro';
+import '../styles/home.css';
+---
+
+<BaseLayout
+  title="Studio | Baja Works Co."
+  description="Studio by Baja Works Co. — custom design and fabrication for posters, banners, signage, logos, stickers, decals, event graphics, prototypes and other custom pieces."
+>
+  <HomeHeader />
+  <section class="hero">
+    <div class="heroMedia"></div>
+    <div class="heroOverlay">
+      <div class="heroBadge reveal">
+        <h1>Studio</h1>
+        <h3>Design &amp; Fabrication</h3>
+        <p>Custom‑made design work — posters, banners, signage, logos, stickers, decals, and event graphics. We can also prototype and fabricate custom pieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">About the Studio</h2>
+      <div class="introGrid">
+        <div class="copyCard reveal">
+          <h3>From Concept to Craft</h3>
+          <p>Our Studio is where ideas take shape. With a background in graphic design and fabrication, we handle everything from print layouts and event graphics to custom signage and prototypes. Whether you need a one‑off banner or a full branding package, we combine modern tools with hands‑on craftsmanship.</p>
+          <p>We collaborate with clients to translate their vision into tangible objects. No project is too small or too ambitious — let’s build something unique together.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sectionTitle reveal">Start Your Project</h2>
+      <p class="reveal">Ready to bring your idea to life? Reach out with details about your project. We’ll work with you on design, materials, timeline and pricing before making it a reality.</p>
+    </div>
+  </section>
+
+  <HomeContact />
+  <HomeFaq />
+  <HomeFooter />
+  <HomeRevealScript />
+</BaseLayout>
