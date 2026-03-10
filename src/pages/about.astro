@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import CartDrawer from '../components/shared/CartDrawer.tsx';
+import '../styles/global.css';
+---
+
+<BaseLayout title="About | Baja Works Co." description="The workshop behind the brand. Learn about our process, tools, and philosophy.">
+  <Navbar theme="dark" />
+  <CartDrawer client:load />
+  <div class="grain"></div>
+
+  <section style="max-width:780px;margin:0 auto;padding:76px clamp(18px,4vw,40px) 60px;">
+    <div class="label-accent reveal" style="margin-bottom:22px;">About</div>
+
+    <h1 class="reveal reveal-d1" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,68px);letter-spacing:2px;line-height:0.95;margin:0 0 36px;">
+      The Workshop<br /><span style="color:rgba(232,228,223,0.25);">Behind the Brand</span>
+    </h1>
+
+    <div class="reveal reveal-d2" style="font-size:15.5px;line-height:1.9;color:rgba(232,228,223,0.5);display:flex;flex-direction:column;gap:22px;">
+      <p style="margin:0;">Baja Works Co. was born between the desert and the coast. We believed the things people wear, hold, and live with should carry the same weight as the landscape that inspired them — raw, minimal, built to last.</p>
+      <p style="margin:0;">Every product passes through our hands. We design on screen, cut on CNC, engrave by laser, and finish by hand. There's no middleman between the idea and the object.</p>
+      <p style="margin:0;">Our divisions — Casa, Studio, and Threads — aren't separate brands. They're different expressions of the same philosophy: strip it down, make it well, let it speak for itself.</p>
+    </div>
+
+    <div class="reveal reveal-d3" style="margin-top:52px;padding:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.015);">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(232,228,223,0.25);margin-bottom:18px;">Tools of the Trade</div>
+      <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+        <div>
+          <div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">CNC Machining</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.35);line-height:1.5;">Precision cutting for wood and metal</div>
+        </div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">Laser Engraving</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.35);line-height:1.5;">Detail work on any material</div>
+        </div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">3D Printing</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.35);line-height:1.5;">Rapid prototyping and custom parts</div>
+        </div>
+        <div>
+          <div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">Graphic Design</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.35);line-height:1.5;">Digital artwork and print production</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <RevealScript />
+</BaseLayout>

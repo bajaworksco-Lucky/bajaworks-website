@@ -1,51 +1,66 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HomeHeader from '../components/home/HomeHeader.astro';
-import HomeContact from '../components/home/HomeContact.astro';
-import HomeFaq from '../components/home/HomeFaq.astro';
-import HomeFooter from '../components/home/HomeFooter.astro';
-import HomeRevealScript from '../components/home/HomeRevealScript.astro';
-import '../styles/home.css';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import CartDrawer from '../components/shared/CartDrawer.tsx';
+import '../styles/global.css';
 ---
 
-<BaseLayout
-  title="Threads | Baja Works Co."
-  description="Threads by Baja Works Co. — apparel and merch for everyday wear, minimalist tees, hoodies, hats and small-batch drops with Baja roots."
->
-  <HomeHeader />
-  <section class="hero">
-    <div class="heroMedia"></div>
-    <div class="heroOverlay">
-      <div class="heroBadge reveal">
-        <h1>Threads</h1>
-        <h3>Wear Your Roots</h3>
-        <p>Apparel and merch built for everyday wear — minimalist tees, hoodies, hats, and small‑batch drops. Clean fits, strong identity, Baja roots.</p>
+<BaseLayout title="Baja Threads | Baja Works Co." description="Minimal streetwear with desert roots. Clean silhouettes, muted palettes, limited drops.">
+  <Navbar theme="dark" />
+  <CartDrawer client:load />
+  <div class="grain"></div>
+
+  <!-- ═══ HERO ═══ -->
+  <section style="position:relative;overflow:hidden;min-height:min(82vh,660px);display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,0.05);background:#0A0A0A;color:#F0F0F0;">
+    <div style="position:absolute;top:0;right:15%;width:1px;height:120%;background:rgba(255,255,255,0.03);transform:rotate(-12deg);transform-origin:top center;"></div>
+    <div style="position:absolute;top:0;right:28%;width:1px;height:120%;background:rgba(255,255,255,0.02);transform:rotate(-12deg);transform-origin:top center;"></div>
+    <div style="position:absolute;bottom:0;left:10%;width:1px;height:80%;background:rgba(255,255,255,0.02);transform:rotate(8deg);transform-origin:bottom center;"></div>
+
+    <div class="container" style="padding-top:80px;padding-bottom:80px;position:relative;">
+      <div class="reveal" style="font-size:10px;letter-spacing:5px;text-transform:uppercase;color:rgba(240,240,240,0.2);margin-bottom:22px;">Baja Works → Threads</div>
+      <h1 class="reveal reveal-d1" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(68px,13vw,150px);letter-spacing:5px;line-height:0.82;margin:0;background:linear-gradient(180deg,#F0F0F0 25%,rgba(240,240,240,0.15) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+        THREADS
+      </h1>
+      <p class="reveal reveal-d2" style="font-size:clamp(14px,1.7vw,17px);line-height:1.6;color:rgba(240,240,240,0.25);max-width:40ch;margin-top:26px;font-weight:300;">
+        Minimal streetwear with desert roots. Clean silhouettes, muted palettes, limited drops.
+      </p>
+      <div class="reveal reveal-d3" style="margin-top:36px;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:rgba(240,240,240,0.18);display:flex;align-items:center;gap:14px;">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#E8753A;box-shadow:0 0 12px rgba(232,117,58,0.4);animation:pulse 2s ease infinite;"></span>
+        First Drop — Coming Soon
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ═══ PRODUCT PREVIEW ═══ -->
+  <section style="padding:56px 0 72px;background:#0A0A0A;color:#F0F0F0;">
     <div class="container">
-      <h2 class="sectionTitle reveal">About Threads</h2>
-      <div class="introGrid">
-        <div class="copyCard reveal">
-          <h3>Design Philosophy</h3>
-          <p>Inspired by the rugged coastlines of Baja and the creative spirit of California, our Threads line blends comfort with character. We craft garments using durable fabrics and timeless silhouettes, focusing on quality over quantity. Every drop is intentional and limited.</p>
-          <p>From everyday tees and hoodies to hats and accessories, each piece carries our signature Baja roots and is made to feel good and last long.</p>
-        </div>
+      <div class="grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        {['Tees', 'Hoodies', 'Hats', 'Essentials'].map((item, i) => (
+          <div class={`reveal ${i > 0 ? `reveal-d${i}` : ''}`} style={`height:320px;border-radius:3px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(255,255,255,${0.015 + i * 0.008}),rgba(255,255,255,0.005));display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;cursor:pointer;`}>
+            <div style={`position:absolute;top:18px;right:18px;font-size:9px;letter-spacing:3px;color:rgba(240,240,240,0.12);text-transform:uppercase;`}>0{i + 1}</div>
+            <div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;">{item}</div>
+              <div style="font-size:10px;color:rgba(240,240,240,0.2);text-transform:uppercase;letter-spacing:2px;margin-top:5px;">Coming Soon</div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="sectionTitle reveal">Shop Coming Soon</h2>
-      <p class="reveal">Our online shop will launch soon. Sign up for our newsletter or follow us on Instagram to catch the first drop of Threads apparel. For custom merch or bulk orders, please contact us.</p>
+  <!-- ═══ NEWSLETTER ═══ -->
+  <section style="border-top:1px solid rgba(255,255,255,0.05);padding:56px 0;background:#0A0A0A;color:#F0F0F0;">
+    <div style="max-width:550px;margin:0 auto;padding:0 clamp(18px,4vw,40px);text-align:center;">
+      <div class="reveal">
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,4vw,36px);letter-spacing:3px;margin:0 0 12px;">Don't Miss the Drop</h2>
+        <p style="font-size:13.5px;color:rgba(240,240,240,0.25);margin-bottom:26px;">Follow us on Instagram or reach out to get notified.</p>
+        <a href="/contact" style="display:inline-block;padding:11px 28px;border-radius:2px;border:1px solid rgba(240,240,240,0.12);background:transparent;color:rgba(240,240,240,0.5);font-family:'Outfit',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;">Stay Connected</a>
+      </div>
     </div>
   </section>
 
-  <HomeContact />
-  <HomeFaq />
-  <HomeFooter />
-  <HomeRevealScript />
+  <Footer />
+  <RevealScript />
 </BaseLayout>

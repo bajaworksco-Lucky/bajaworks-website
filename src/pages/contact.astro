@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import CartDrawer from '../components/shared/CartDrawer.tsx';
+import ContactForm from '../components/shared/ContactForm.tsx';
+import '../styles/global.css';
+---
+
+<BaseLayout title="Contact | Baja Works Co." description="Get in touch for custom orders, design work, collaborations, and inquiries.">
+  <Navbar theme="dark" />
+  <CartDrawer client:load />
+  <div class="grain"></div>
+
+  <section style="max-width:900px;margin:0 auto;padding:76px clamp(18px,4vw,40px) 80px;">
+    <div class="reveal">
+      <div class="label-accent" style="margin-bottom:22px;">Contact</div>
+      <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,68px);letter-spacing:2px;line-height:0.95;margin:0 0 16px;">
+        Let's Build<br /><span style="color:rgba(232,228,223,0.25);">Something</span>
+      </h1>
+      <p style="font-size:15px;line-height:1.75;color:rgba(232,228,223,0.4);max-width:46ch;">
+        Custom orders, design work, collaborations — whatever you have in mind, we want to hear it.
+      </p>
+    </div>
+
+    <div class="contact-grid reveal reveal-d2" style="display:grid;grid-template-columns:1.2fr 1fr;gap:40px;margin-top:48px;">
+      <!-- Form -->
+      <div style="padding:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);">
+        <ContactForm client:load />
+      </div>
+
+      <!-- Info -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="padding:22px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.015);">
+          <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C4A070;margin-bottom:8px;">Email</div>
+          <div style="font-size:15px;font-weight:500;margin-bottom:4px;">bajaworksco@gmail.com</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.3);line-height:1.5;">Quotes, custom orders, and general inquiries.</div>
+        </div>
+
+        <div style="padding:22px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.015);">
+          <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C4A070;margin-bottom:8px;">Instagram</div>
+          <div style="font-size:15px;font-weight:500;margin-bottom:4px;">@bajaworksco</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.3);line-height:1.5;">Updates, drops, and behind-the-scenes.</div>
+        </div>
+
+        <div style="padding:22px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.015);">
+          <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C4A070;margin-bottom:8px;">Hours</div>
+          <div style="font-size:15px;font-weight:500;margin-bottom:4px;">Mon–Fri 6a–5p · Sat 10a–5p</div>
+          <div style="font-size:12.5px;color:rgba(232,228,223,0.3);line-height:1.5;">Sunday closed. We respond within 24 hours.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <RevealScript />
+</BaseLayout>

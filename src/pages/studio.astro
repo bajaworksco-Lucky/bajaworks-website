@@ -1,51 +1,133 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HomeHeader from '../components/home/HomeHeader.astro';
-import HomeContact from '../components/home/HomeContact.astro';
-import HomeFaq from '../components/home/HomeFaq.astro';
-import HomeFooter from '../components/home/HomeFooter.astro';
-import HomeRevealScript from '../components/home/HomeRevealScript.astro';
-import '../styles/home.css';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import CartDrawer from '../components/shared/CartDrawer.tsx';
+import StudioShop from '../components/studio/StudioShop.tsx';
+import '../styles/global.css';
 ---
 
-<BaseLayout
-  title="Studio | Baja Works Co."
-  description="Studio by Baja Works Co. — custom design and fabrication for posters, banners, signage, logos, stickers, decals, event graphics, prototypes and other custom pieces."
->
-  <HomeHeader />
-  <section class="hero">
-    <div class="heroMedia"></div>
-    <div class="heroOverlay">
-      <div class="heroBadge reveal">
-        <h1>Studio</h1>
-        <h3>Design &amp; Fabrication</h3>
-        <p>Custom‑made design work — posters, banners, signage, logos, stickers, decals, and event graphics. We can also prototype and fabricate custom pieces.</p>
+<BaseLayout title="Baja Studio | Baja Works Co." description="Visual work made real. Posters, banners, canvases, collages, branding — if it can be designed and printed, we build it.">
+  <Navbar theme="light" />
+  <CartDrawer client:load />
+
+  <!-- ═══ HERO — high contrast, graphic ═══ -->
+  <section style="background:#111;color:#F2F0EC;overflow:hidden;border-bottom:4px solid #E8753A;position:relative;">
+    <div style="position:absolute;top:30px;right:10%;width:120px;height:120px;border:2px solid rgba(232,117,58,0.2);border-radius:50%;"></div>
+    <div style="position:absolute;bottom:20px;right:18%;width:60px;height:60px;border:2px solid rgba(232,117,58,0.1);"></div>
+    <div style="position:absolute;top:50%;left:60%;width:40%;height:1px;background:rgba(232,117,58,0.08);"></div>
+
+    <div class="container" style="padding-top:64px;padding-bottom:56px;position:relative;">
+      <div class="reveal" style="font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#E8753A;margin-bottom:18px;font-weight:600;">
+        Baja Works → Studio
+      </div>
+      <h1 class="reveal reveal-d1" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,11vw,120px);letter-spacing:4px;line-height:0.85;margin:0;">
+        BAJA<br />STUDIO
+      </h1>
+      <p class="reveal reveal-d2" style="font-size:16px;line-height:1.65;color:rgba(242,240,236,0.45);max-width:42ch;margin-top:22px;font-weight:300;">
+        Visual work made real. Posters, banners, canvases, collages, branding — if it can be designed and printed, we build it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ SERVICES ═══ -->
+  <section style="padding:56px 0;border-bottom:1px solid rgba(17,17,17,0.08);background:#F2F0EC;color:#111;">
+    <div class="container">
+      <div class="reveal" style="font-size:10px;letter-spacing:4px;color:rgba(17,17,17,0.3);text-transform:uppercase;margin-bottom:28px;">What We Do</div>
+
+      <div class="reveal reveal-d1" style="padding:24px 0;border-bottom:1px solid rgba(17,17,17,0.08);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;cursor:pointer;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">
+        <div style="flex:1 1 200px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <span style="font-size:16px;color:#E8753A;">▣</span>
+            <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin:0;">Prints & Posters</h3>
+          </div>
+          <p style="font-size:13.5px;color:rgba(17,17,17,0.4);margin:0;line-height:1.6;padding-left:28px;">Custom art prints, graphic posters, and limited-edition runs in any size.</p>
+        </div>
+        <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;font-weight:600;white-space:nowrap;">View Work →</span>
+      </div>
+
+      <div class="reveal reveal-d2" style="padding:24px 0;border-bottom:1px solid rgba(17,17,17,0.08);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;cursor:pointer;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">
+        <div style="flex:1 1 200px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <span style="font-size:16px;color:#E8753A;">▬</span>
+            <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin:0;">Banners & Signage</h3>
+          </div>
+          <p style="font-size:13.5px;color:rgba(17,17,17,0.4);margin:0;line-height:1.6;padding-left:28px;">Event banners, trade show displays, and storefront signage built to stand out.</p>
+        </div>
+        <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;font-weight:600;white-space:nowrap;">View Work →</span>
+      </div>
+
+      <div class="reveal reveal-d3" style="padding:24px 0;border-bottom:1px solid rgba(17,17,17,0.08);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;cursor:pointer;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">
+        <div style="flex:1 1 200px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <span style="font-size:16px;color:#E8753A;">▢</span>
+            <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin:0;">Canvas & Collage</h3>
+          </div>
+          <p style="font-size:13.5px;color:rgba(17,17,17,0.4);margin:0;line-height:1.6;padding-left:28px;">Family photo collages, canvas prints, and custom compositions — tell your story on the wall.</p>
+        </div>
+        <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;font-weight:600;white-space:nowrap;">View Work →</span>
+      </div>
+
+      <div class="reveal reveal-d4" style="padding:24px 0;border-bottom:1px solid rgba(17,17,17,0.08);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;cursor:pointer;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">
+        <div style="flex:1 1 200px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <span style="font-size:16px;color:#E8753A;">◈</span>
+            <h3 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin:0;">Branding & Design</h3>
+          </div>
+          <p style="font-size:13.5px;color:rgba(17,17,17,0.4);margin:0;line-height:1.6;padding-left:28px;">Logos, stickers, decals, business cards, and full brand packages from scratch.</p>
+        </div>
+        <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;font-weight:600;white-space:nowrap;">View Work →</span>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ═══ SHOP (React) ═══ -->
+  <div style="background:#F2F0EC;color:#111;">
+    <StudioShop client:load />
+  </div>
+
+  <!-- ═══ PORTFOLIO TEASER ═══ -->
+  <section style="background:#111;color:#F2F0EC;padding:56px 0;border-top:4px solid #E8753A;">
     <div class="container">
-      <h2 class="sectionTitle reveal">About the Studio</h2>
-      <div class="introGrid">
-        <div class="copyCard reveal">
-          <h3>From Concept to Craft</h3>
-          <p>Our Studio is where ideas take shape. With a background in graphic design and fabrication, we handle everything from print layouts and event graphics to custom signage and prototypes. Whether you need a one‑off banner or a full branding package, we combine modern tools with hands‑on craftsmanship.</p>
-          <p>We collaborate with clients to translate their vision into tangible objects. No project is too small or too ambitious — let’s build something unique together.</p>
+      <div class="reveal" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:14px;">
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,4vw,40px);letter-spacing:2px;margin:0;">Recent Work</h2>
+        <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,240,236,0.3);">Portfolio expanding</div>
+      </div>
+      <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div class="reveal" style="height:260px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(135deg,rgba(232,117,58,0.04),rgba(255,255,255,0.01));display:flex;align-items:flex-end;padding:18px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Poster Design</div>
+            <div style="font-size:10px;color:rgba(242,240,236,0.3);text-transform:uppercase;letter-spacing:1px;">Sample</div>
+          </div>
+        </div>
+        <div class="reveal reveal-d1" style="height:260px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(135deg,rgba(232,117,58,0.065),rgba(255,255,255,0.01));display:flex;align-items:flex-end;padding:18px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Event Banner</div>
+            <div style="font-size:10px;color:rgba(242,240,236,0.3);text-transform:uppercase;letter-spacing:1px;">Sample</div>
+          </div>
+        </div>
+        <div class="reveal reveal-d2" style="height:260px;border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(135deg,rgba(232,117,58,0.09),rgba(255,255,255,0.01));display:flex;align-items:flex-end;padding:18px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Canvas Collage</div>
+            <div style="font-size:10px;color:rgba(242,240,236,0.3);text-transform:uppercase;letter-spacing:1px;">Sample</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="sectionTitle reveal">Start Your Project</h2>
-      <p class="reveal">Ready to bring your idea to life? Reach out with details about your project. We’ll work with you on design, materials, timeline and pricing before making it a reality.</p>
+  <!-- ═══ CTA ═══ -->
+  <section style="padding:72px 0;background:#F2F0EC;color:#111;">
+    <div style="max-width:650px;margin:0 auto;padding:0 clamp(18px,4vw,40px);text-align:center;">
+      <div class="reveal">
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,5vw,48px);letter-spacing:2px;margin:0 0 14px;">Start a Project</h2>
+        <p style="font-size:14px;color:rgba(17,17,17,0.4);margin-bottom:32px;line-height:1.7;">Send us your vision — a sketch, a photo, an idea. We'll turn it into something you can hold.</p>
+        <a href="/contact" style="display:inline-block;padding:13px 36px;border-radius:3px;border:3px solid #111;background:transparent;color:#111;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;text-transform:uppercase;">Get in Touch</a>
+      </div>
     </div>
   </section>
 
-  <HomeContact />
-  <HomeFaq />
-  <HomeFooter />
-  <HomeRevealScript />
+  <Footer />
+  <RevealScript />
 </BaseLayout>

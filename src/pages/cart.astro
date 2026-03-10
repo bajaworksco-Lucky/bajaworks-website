@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import CartPage from '../components/shared/CartPage.tsx';
+import '../styles/global.css';
+---
+
+<BaseLayout title="Cart | Baja Works Co." description="Review your cart and checkout.">
+  <Navbar theme="dark" />
+  <div class="grain"></div>
+
+  <CartPage client:load />
+
+  <Footer />
+  <RevealScript />
+</BaseLayout>

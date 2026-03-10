@@ -1,4 +1,23 @@
 [
-  { "id": "coaster-001", "name": "Topo Coaster Set", "price": 2800, "category": "house", "image": "/images/coasters.jpg" },
-  { "id": "tag-001", "name": "Metal Pet Tag", "price": 1800, "category": "pets", "image": "/images/tag.jpg" }
+  { "id": "c-001", "name": "Topo Coaster Set", "price": 2800, "division": "casa", "category": "home", "badge": "New", "image": "/images/products/coasters.jpg" },
+  { "id": "c-002", "name": "Desert Clock", "price": 4500, "division": "casa", "category": "home", "badge": null, "image": "/images/products/clock.jpg" },
+  { "id": "c-003", "name": "Succulent Stand", "price": 3200, "division": "casa", "category": "home", "badge": null, "image": "/images/products/stand.jpg" },
+  { "id": "c-004", "name": "Candle Holder — Mesquite", "price": 2400, "division": "casa", "category": "home", "badge": "New", "image": "/images/products/candle-holder.jpg" },
+  { "id": "c-005", "name": "Wall Shelf — Raw Edge", "price": 5800, "division": "casa", "category": "home", "badge": null, "image": "/images/products/shelf.jpg" },
+  { "id": "c-006", "name": "Entryway Organizer", "price": 6200, "division": "casa", "category": "home", "badge": null, "image": "/images/products/organizer.jpg" },
+  { "id": "c-007", "name": "Bat Rack Organizer", "price": 3800, "division": "casa", "category": "kids", "badge": "Popular", "image": "/images/products/bat-rack.jpg" },
+  { "id": "c-008", "name": "Name Plaque — Engraved", "price": 2200, "division": "casa", "category": "kids", "badge": null, "image": "/images/products/plaque.jpg" },
+  { "id": "c-009", "name": "Trophy Display Shelf", "price": 4400, "division": "casa", "category": "kids", "badge": null, "image": "/images/products/trophy-shelf.jpg" },
+  { "id": "c-010", "name": "Engraved Pet Tag — Brass", "price": 1800, "division": "casa", "category": "pets", "badge": "Best Seller", "image": "/images/products/pet-tag.jpg" },
+  { "id": "c-011", "name": "Elevated Feeding Station", "price": 5200, "division": "casa", "category": "pets", "badge": null, "image": "/images/products/feeding-station.jpg" },
+  { "id": "c-012", "name": "Leash & Collar Hanger", "price": 2600, "division": "casa", "category": "pets", "badge": null, "image": "/images/products/leash-hanger.jpg" },
+  { "id": "c-013", "name": "Charcuterie Board — Walnut", "price": 4800, "division": "casa", "category": "gifts", "badge": "Popular", "image": "/images/products/charcuterie.jpg" },
+  { "id": "c-014", "name": "Custom Engraved Sign", "price": 3500, "division": "casa", "category": "gifts", "badge": null, "image": "/images/products/sign.jpg" },
+  { "id": "c-015", "name": "Wedding Date Board", "price": 5500, "division": "casa", "category": "gifts", "badge": null, "image": "/images/products/wedding-board.jpg" },
+  { "id": "s-001", "name": "Custom Poster — 18x24", "price": 3500, "division": "studio", "category": "prints", "badge": null, "image": "/images/products/poster.jpg" },
+  { "id": "s-002", "name": "Canvas Print — 16x20", "price": 4800, "division": "studio", "category": "canvas", "badge": null, "image": "/images/products/canvas.jpg" },
+  { "id": "s-003", "name": "Photo Collage Canvas", "price": 6500, "division": "studio", "category": "canvas", "badge": "Popular", "image": "/images/products/collage.jpg" },
+  { "id": "s-004", "name": "Event Banner — 3x6ft", "price": 7500, "division": "studio", "category": "banners", "badge": null, "image": "/images/products/banner.jpg" },
+  { "id": "s-005", "name": "Sticker Pack — Custom", "price": 1200, "division": "studio", "category": "brand", "badge": "New", "image": "/images/products/stickers.jpg" },
+  { "id": "s-006", "name": "Logo Design Package", "price": 15000, "division": "studio", "category": "brand", "badge": null, "image": "/images/products/logo-package.jpg" }
 ]
