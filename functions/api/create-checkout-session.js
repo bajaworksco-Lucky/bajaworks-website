@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 
 export async function onRequestPost({ request, env }) {
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(env.pk_test_51T9cabD6aAsiZaIoAOKbjyAjIWF7ArOKqE4XVIVm8C2ky8YZkgCP9fDnaLdvmwQUmdUD6qhvorv4DyLsCWGjwjyi00PMO88SKD);
   const { items } = await request.json();
 
   const line_items = items.map((i) => ({
