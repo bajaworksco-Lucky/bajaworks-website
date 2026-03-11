@@ -30,15 +30,19 @@ export default function CasaShop() {
         <div style={{
           maxWidth: 1200, margin: '0 auto', padding: '0 clamp(18px, 4vw, 40px)',
           display: 'flex', gap: 2, overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}>
           {CATEGORIES.map(cat => (
             <button key={cat.id} onClick={() => setActive(cat.id)} style={{
-              padding: '14px 18px', border: 'none', cursor: 'pointer', background: 'transparent',
+              padding: '14px 16px', border: 'none', cursor: 'pointer', background: 'transparent',
               fontFamily: "'Outfit', sans-serif", fontSize: 12.5,
               letterSpacing: 1.5, textTransform: 'uppercase', fontWeight: 500,
               color: active === cat.id ? '#2A2520' : 'rgba(26,26,26,0.3)',
               borderBottom: active === cat.id ? '2px solid #C4A070' : '2px solid transparent',
               transition: 'all 0.2s', whiteSpace: 'nowrap',
+              minHeight: 48,
             }}>{cat.icon} {cat.label}</button>
           ))}
         </div>

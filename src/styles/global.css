@@ -180,6 +180,8 @@ input::placeholder, textarea::placeholder {
 }
 
 /* --- Responsive --- */
+
+/* Tablet */
 @media (max-width: 900px) {
   .grid-3 { grid-template-columns: 1fr !important; }
   .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
@@ -187,20 +189,40 @@ input::placeholder, textarea::placeholder {
   .footer-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
   .product-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .contact-grid { grid-template-columns: 1fr !important; }
+  .section { padding: 56px 0; }
+  .section-sm { padding: 32px 0; }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
   .grid-4 { grid-template-columns: 1fr !important; }
   .product-grid { grid-template-columns: 1fr !important; }
+  .section { padding: 44px 0; }
+
+  /* Tighten up spacing on small screens */
+  .heading-xl { font-size: clamp(42px, 14vw, 72px); }
+
+  /* Full-width buttons on mobile */
+  .btn-primary,
+  .btn-outline {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 }
 
-@media (max-width: 768px) {
-  .desktop-nav { display: none !important; }
-  .mobile-menu-btn { display: block !important; }
-  .mobile-cart-btn { display: block !important; }
+/* Touch-friendly: larger tap targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  .bw-nav__panel-link {
+    min-height: 48px;
+  }
+  .product-card,
+  .product-card-dark {
+    cursor: default;
+  }
 }
 
-@media (min-width: 769px) {
-  .mobile-menu { display: none !important; }
-  .mobile-controls { display: none !important; }
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
 }

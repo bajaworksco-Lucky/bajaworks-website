@@ -7,12 +7,8 @@ const { theme = 'dark' } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const isDark = theme === 'dark';
-const bg = isDark ? 'rgba(13,13,11,0.9)' : 'rgba(250,247,241,0.93)';
 const text = isDark ? '#E8E4DF' : '#1a1a1a';
 const muted = isDark ? 'rgba(232,228,223,0.4)' : 'rgba(26,26,26,0.45)';
-const border = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(26,26,26,0.08)';
-const cartBg = isDark ? 'rgba(196,160,112,0.12)' : 'rgba(196,160,112,0.15)';
-const cartBorder = isDark ? 'rgba(196,160,112,0.25)' : 'rgba(196,160,112,0.3)';
 const cartColor = isDark ? '#C4A070' : '#8B6D4F';
 
 const links = [
@@ -21,73 +17,243 @@ const links = [
   { href: '/studio', label: 'Studio' },
   { href: '/threads', label: 'Threads' },
   { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
 
-<header id="main-nav" style={`position:sticky;top:0;z-index:100;background:${bg};backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid ${border};`}>
+<header class={`bw-nav bw-nav--${theme}`}>
   <div class="container" style="height:64px;display:flex;align-items:center;justify-content:space-between;">
-    
+
     <!-- Logo -->
-    <a href="/" style="display:flex;align-items:center;gap:10px;">
-      <img src="/images/baja-logo.png" alt="Baja Works Logo" style="height:28px;">
-      <span style={`font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2.5px;color:${text};`}>BAJA WORKS CO.</span>
+    <a href="/" class="bw-nav__logo">
+      <div class="bw-nav__logo-mark">B</div>
+      <span class="bw-nav__logo-text">BAJA WORKS CO.</span>
     </a>
 
     <!-- Desktop Nav -->
-    <nav class="desktop-nav" style="display:flex;align-items:center;gap:2px;">
+    <nav class="bw-nav__desktop">
       {links.map(l => (
-        <a
-          href={l.href}
-          aria-current={isActive(l.href) ? 'page' : undefined}
-          style={`padding:7px 13px;border-radius:5px;font-family:'Outfit',sans-serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;font-weight:400;color:${isActive(l.href) ? text : muted};transition:color 0.2s;`}
-        >{l.label}</a>
+        <a href={l.href} class={`bw-nav__link ${isActive(l.href) ? 'is-active' : ''}`}>{l.label}</a>
       ))}
-      <div style={`width:1px;height:18px;background:${border};margin:0 6px;`}></div>
-      <a
-        href="/contact"
-        style={`padding:7px 13px;font-family:'Outfit',sans-serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;font-weight:400;color:${isActive('/contact') ? text : muted};`}
-      >Contact</a>
-      <a
-        href="/cart"
-        id="cart-nav-btn"
-        style={`margin-left:6px;padding:7px 14px;border-radius:5px;font-family:'Outfit',sans-serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;font-weight:500;background:${cartBg};border:1px solid ${cartBorder};color:${cartColor};display:flex;align-items:center;gap:8px;`}
-      >
+      <a href="/cart" class="bw-nav__cart-desktop">
         Cart
-        <span id="cart-count" style="display:none;background:#E8753A;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">0</span>
+        <span id="cart-badge-d" class="bw-badge" style="display:none;">0</span>
       </a>
     </nav>
 
-    <!-- Mobile Controls -->
-    <div class="mobile-controls" style="display:none;align-items:center;gap:8px;">
-      <a href="/cart" class="mobile-cart-btn" style={`display:none;color:${text};font-size:13px;font-family:'Outfit',sans-serif;letter-spacing:1px;padding:6px 10px;`}>
-        Cart <span id="cart-count-mobile" style="display:none;"></span>
+    <!-- Mobile: Cart + Hamburger -->
+    <div class="bw-nav__mobile-btns">
+      <a href="/cart" class="bw-nav__cart-mobile" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span id="cart-badge-m" class="bw-badge bw-badge--abs" style="display:none;">0</span>
       </a>
-      <button id="mobile-toggle" class="mobile-menu-btn" style={`display:none;background:none;border:none;cursor:pointer;padding:6px;color:${text};font-size:22px;`}>☰</button>
+      <button id="hamburger" class="bw-nav__burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="mobile-menu" style={`display:none;position:absolute;top:64px;left:0;right:0;background:${isDark ? '#0D0D0B' : '#FAF7F1'};border-bottom:1px solid ${border};padding:16px clamp(18px,4vw,40px);z-index:99;`}>
-    {[...links, { href: '/contact', label: 'Contact' }].map(l => (
-      <a
-        href={l.href}
-        style={`display:block;padding:12px 0;font-family:'Outfit',sans-serif;font-size:15px;letter-spacing:1px;text-transform:uppercase;color:${isActive(l.href) ? text : muted};border-bottom:1px solid ${border};`}
-      >{l.label}</a>
+  <nav id="mobile-panel" class="bw-nav__panel" aria-hidden="true">
+    {links.map(l => (
+      <a href={l.href} class={`bw-nav__panel-link ${isActive(l.href) ? 'is-active' : ''}`}>{l.label}</a>
     ))}
-  </div>
+    <a href="/cart" class="bw-nav__panel-link">
+      Cart <span id="cart-badge-p" class="bw-badge" style="display:none;">0</span>
+    </a>
+  </nav>
 </header>
 
-<script>
-  const toggle = document.getElementById('mobile-toggle');
-  const menu = document.getElementById('mobile-menu');
-  if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const open = menu.style.display === 'flex';
-      menu.style.display = open ? 'none' : 'flex';
-      menu.style.flexDirection = 'column';
-      toggle.textContent = open ? '☰' : '✕';
-    });
+<style>
+  /* ── Shell ── */
+  .bw-nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
   }
+  .bw-nav--dark {
+    background: rgba(13,13,11,0.92);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: #E8E4DF;
+  }
+  .bw-nav--light {
+    background: rgba(250,247,241,0.94);
+    border-bottom: 1px solid rgba(26,26,26,0.08);
+    color: #1a1a1a;
+  }
+
+  /* ── Logo ── */
+  .bw-nav__logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: inherit; flex-shrink: 0;
+  }
+  .bw-nav__logo-mark {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(135deg, #C4A070, #8B6D4F);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff; letter-spacing: 1px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .bw-nav__logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 2.5px;
+  }
+
+  /* ── Desktop Nav ── */
+  .bw-nav__desktop {
+    display: flex; align-items: center; gap: 2px;
+  }
+  .bw-nav__link {
+    padding: 7px 13px; border-radius: 5px;
+    font-family: 'Outfit', sans-serif; font-size: 12.5px;
+    letter-spacing: 1px; text-transform: uppercase; font-weight: 400;
+    text-decoration: none; transition: color 0.2s;
+  }
+  .bw-nav--dark .bw-nav__link { color: rgba(232,228,223,0.4); }
+  .bw-nav--dark .bw-nav__link.is-active,
+  .bw-nav--dark .bw-nav__link:hover { color: #E8E4DF; }
+  .bw-nav--light .bw-nav__link { color: rgba(26,26,26,0.45); }
+  .bw-nav--light .bw-nav__link.is-active,
+  .bw-nav--light .bw-nav__link:hover { color: #1a1a1a; }
+
+  .bw-nav__cart-desktop {
+    margin-left: 8px; padding: 7px 14px; border-radius: 5px;
+    font-family: 'Outfit', sans-serif; font-size: 12.5px;
+    letter-spacing: 1px; text-transform: uppercase; font-weight: 500;
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+  }
+  .bw-nav--dark .bw-nav__cart-desktop {
+    background: rgba(196,160,112,0.12); border: 1px solid rgba(196,160,112,0.25);
+    color: #C4A070;
+  }
+  .bw-nav--light .bw-nav__cart-desktop {
+    background: rgba(196,160,112,0.15); border: 1px solid rgba(196,160,112,0.3);
+    color: #8B6D4F;
+  }
+
+  /* ── Badge ── */
+  .bw-badge {
+    background: #E8753A; color: #fff; border-radius: 50%;
+    min-width: 18px; height: 18px; padding: 0 4px;
+    font-size: 10px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .bw-badge--abs {
+    position: absolute; top: -4px; right: -6px;
+    min-width: 16px; height: 16px; font-size: 9px;
+  }
+
+  /* ── Mobile Buttons ── */
+  .bw-nav__mobile-btns {
+    display: none; align-items: center; gap: 8px;
+  }
+  .bw-nav__cart-mobile {
+    position: relative; display: flex; align-items: center;
+    padding: 6px; color: inherit; text-decoration: none;
+  }
+
+  /* ── Hamburger ── */
+  .bw-nav__burger {
+    display: flex; flex-direction: column; justify-content: center;
+    align-items: center; gap: 5px;
+    width: 38px; height: 38px; padding: 0;
+    background: none; border: none; cursor: pointer;
+  }
+  .bw-nav__burger span {
+    display: block; width: 20px; height: 2px; border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+  .bw-nav--dark .bw-nav__burger span { background: #E8E4DF; }
+  .bw-nav--light .bw-nav__burger span { background: #1a1a1a; }
+
+  .bw-nav__burger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .bw-nav__burger.is-open span:nth-child(2) { opacity: 0; }
+  .bw-nav__burger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Mobile Panel ── */
+  .bw-nav__panel {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    display: flex; flex-direction: column;
+    padding: 0 clamp(18px, 4vw, 40px);
+  }
+  .bw-nav--dark .bw-nav__panel {
+    background: rgba(13,13,11,0.98);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .bw-nav--light .bw-nav__panel {
+    background: rgba(250,247,241,0.98);
+    border-bottom: 1px solid rgba(26,26,26,0.08);
+  }
+  .bw-nav__panel.is-open {
+    max-height: 480px; opacity: 1;
+    padding-top: 8px; padding-bottom: 16px;
+  }
+
+  .bw-nav__panel-link {
+    padding: 14px 0; text-decoration: none;
+    font-family: 'Outfit', sans-serif; font-size: 15px;
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .bw-nav--dark .bw-nav__panel-link {
+    color: rgba(232,228,223,0.45);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .bw-nav--dark .bw-nav__panel-link.is-active { color: #E8E4DF; }
+  .bw-nav--light .bw-nav__panel-link {
+    color: rgba(26,26,26,0.4);
+    border-bottom: 1px solid rgba(26,26,26,0.05);
+  }
+  .bw-nav--light .bw-nav__panel-link.is-active { color: #1a1a1a; }
+
+  /* ── Breakpoints ── */
+  @media (max-width: 820px) {
+    .bw-nav__desktop { display: none; }
+    .bw-nav__mobile-btns { display: flex; }
+  }
+  @media (min-width: 821px) {
+    .bw-nav__panel { display: none !important; }
+    .bw-nav__mobile-btns { display: none !important; }
+  }
+
+  /* ── Tiny screens: shrink logo text ── */
+  @media (max-width: 380px) {
+    .bw-nav__logo-text { font-size: 13px; letter-spacing: 1.5px; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('hamburger');
+    const panel = document.getElementById('mobile-panel');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', () => {
+      const open = btn.classList.toggle('is-open');
+      panel.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+    });
+
+    // Close on link click
+    panel.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        btn.classList.remove('is-open');
+        panel.classList.remove('is-open');
+      })
+    );
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.bw-nav') && panel.classList.contains('is-open')) {
+        btn.classList.remove('is-open');
+        panel.classList.remove('is-open');
+      }
+    });
+  });
 </script>
