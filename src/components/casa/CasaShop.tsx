@@ -13,7 +13,9 @@ export default function CasaShop() {
   const [active, setActive] = useState('all');
   const casaProducts = products.filter((p: any) => p.division === 'casa' && (active === 'all' || p.category === active));
 
-  const addToCart = (product: any) => {
+  const addToCart = (e: React.MouseEvent, product: any) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (typeof window !== 'undefined' && (window as any).addToCart) {
       (window as any).addToCart(product);
     }
@@ -60,7 +62,12 @@ export default function CasaShop() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }} className="product-grid">
             {casaProducts.map((product: any, i: number) => (
-              <div key={product.id} className="product-card" style={{ cursor: 'pointer' }}>
+              <a
+                key={product.id}
+                href={`/casa/${product.id}`}
+                className="product-card"
+                style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
+              >
                 <div style={{
                   height: 190,
                   background: `linear-gradient(135deg, rgba(196,160,112,${0.06 + (i % 3) * 0.02}), rgba(168,145,122,${0.04 + (i % 3) * 0.015}))`,
@@ -82,7 +89,7 @@ export default function CasaShop() {
                   <div style={{ fontSize: 14, fontWeight: 500, color: '#2A2520', marginBottom: 6, lineHeight: 1.4 }}>{product.name}</div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: 15, fontWeight: 600, color: '#8B6D4F' }}>${(product.price / 100).toFixed(2)}</span>
-                    <button onClick={() => addToCart(product)} style={{
+                    <button onClick={(e) => addToCart(e, product)} style={{
                       padding: '6px 14px', borderRadius: 4, cursor: 'pointer',
                       fontFamily: "'Outfit', sans-serif", fontSize: 11,
                       fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase',
@@ -91,7 +98,7 @@ export default function CasaShop() {
                     }}>Add</button>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
