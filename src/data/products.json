@@ -242,25 +242,45 @@
   },
   {
     "id": "s-001",
-    "name": "Custom Poster — 18x24",
-    "price": 3500,
+    "name": "Custom Poster",
+    "price": 2500,
     "division": "studio",
     "category": "prints",
     "badge": null,
     "image": "/images/products/poster.jpg",
     "images": ["/images/products/poster.jpg"],
-    "description": "A custom-designed poster printed on premium matte stock. Send us your concept and we'll design it from scratch."
+    "description": "A custom-designed poster printed on premium matte polypropylene. Send us your artwork or concept and we'll produce it in-house on our HP DesignJet Z9+. Need design help? We can create it from scratch.",
+    "features": ["Printed on HP DesignJet Z9+ large-format printer", "Premium matte polypropylene media", "Vivid 9-color ink system", "Indoor rated — fade-resistant", "Rolled and shipped in a protective tube"],
+    "materials": ["HP Everyday Matte Polypropylene"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "12×18\"", "value": "12x18" },
+      { "label": "18×24\"", "value": "18x24", "priceAdd": 1000 },
+      { "label": "24×36\"", "value": "24x36", "priceAdd": 2500 },
+      { "label": "36×48\"", "value": "36x48", "priceAdd": 5000 }
+    ],
+    "care": "Display indoors away from direct sunlight for longest life. Can be framed or mounted."
   },
   {
     "id": "s-002",
-    "name": "Canvas Print — 16x20",
+    "name": "Canvas Print",
     "price": 4800,
     "division": "studio",
     "category": "canvas",
     "badge": null,
     "image": "/images/products/canvas.jpg",
     "images": ["/images/products/canvas.jpg"],
-    "description": "Gallery-wrapped canvas print from your photo or custom artwork."
+    "description": "Gallery-wrapped canvas print from your photo or custom artwork. Printed on Breathing Color Lyve Canvas with archival inks for rich color and texture. Stretched over a solid wood frame, ready to hang.",
+    "features": ["Breathing Color Lyve Canvas", "Archival pigment inks — rated 100+ years", "1.5\" solid wood stretcher bars", "Gallery-wrapped edges", "Hanging hardware included"],
+    "materials": ["Breathing Color Lyve Canvas"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "11×14\"", "value": "11x14" },
+      { "label": "16×20\"", "value": "16x20", "priceAdd": 1200 },
+      { "label": "24×30\"", "value": "24x30", "priceAdd": 3200 },
+      { "label": "30×40\"", "value": "30x40", "priceAdd": 5200 }
+    ],
+    "care": "Dust with a soft dry cloth. Display away from direct sunlight and moisture."
   },
   {
     "id": "s-003",
@@ -271,18 +291,39 @@
     "badge": "Popular",
     "image": "/images/products/collage.jpg",
     "images": ["/images/products/collage.jpg"],
-    "description": "A multi-photo collage printed on stretched canvas. We design the layout — you provide the memories."
+    "description": "A multi-photo collage printed on stretched canvas. Send us your photos and we'll design the layout — you provide the memories. Includes one round of revisions on the layout before printing.",
+    "features": ["Custom collage layout designed by us", "Up to 12 photos per collage", "Breathing Color Lyve Canvas", "1.5\" solid wood stretcher bars", "One revision round included"],
+    "materials": ["Breathing Color Lyve Canvas"],
+    "acceptsUpload": true,
+    "needsDesign": true,
+    "options": [
+      { "label": "16×20\"", "value": "16x20" },
+      { "label": "24×30\"", "value": "24x30", "priceAdd": 2000 },
+      { "label": "30×40\"", "value": "30x40", "priceAdd": 4000 }
+    ],
+    "care": "Dust with a soft dry cloth. Display indoors."
   },
   {
     "id": "s-004",
-    "name": "Event Banner — 3x6ft",
-    "price": 7500,
+    "name": "Event Banner",
+    "price": 4500,
     "division": "studio",
     "category": "banners",
     "badge": null,
     "image": "/images/products/banner.jpg",
     "images": ["/images/products/banner.jpg"],
-    "description": "Full-color vinyl banner with custom graphics. Grommeted and ready to hang."
+    "description": "Full-color custom banner printed on durable scrim vinyl. Grommeted and ready to hang. Built for indoor and outdoor events — birthday parties, grand openings, trade shows, sports banners, and more.",
+    "features": ["Printed on HP DesignJet Z9+ large-format printer", "Kodak Scrim Banner media — tear-resistant", "Hemmed edges with metal grommets", "Indoor/outdoor rated", "UV and weather resistant"],
+    "materials": ["Kodak Scrim Banner"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "2×4 ft", "value": "2x4" },
+      { "label": "2×6 ft", "value": "2x6", "priceAdd": 1500 },
+      { "label": "3×6 ft", "value": "3x6", "priceAdd": 3000 },
+      { "label": "3×8 ft", "value": "3x8", "priceAdd": 4500 },
+      { "label": "4×8 ft", "value": "4x8", "priceAdd": 6500 }
+    ],
+    "care": "Roll for storage — do not fold. Wipe clean with a damp cloth."
   },
   {
     "id": "s-005",
@@ -293,7 +334,18 @@
     "badge": "New",
     "image": "/images/products/stickers.jpg",
     "images": ["/images/products/stickers.jpg"],
-    "description": "Pack of 25 custom die-cut vinyl stickers. Waterproof and UV-resistant."
+    "description": "Pack of custom die-cut vinyl stickers. Waterproof, UV-resistant, and built to last on laptops, water bottles, cars, and anything else. Send your design or we'll create one for you.",
+    "features": ["Die-cut to your design's shape", "Waterproof vinyl", "UV-resistant — won't fade outdoors", "Scratch-resistant laminate finish", "Individual backing for easy peel"],
+    "materials": ["Premium vinyl with laminate"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "25 pack — 2\"", "value": "25-2in" },
+      { "label": "25 pack — 3\"", "value": "25-3in", "priceAdd": 500 },
+      { "label": "50 pack — 2\"", "value": "50-2in", "priceAdd": 800 },
+      { "label": "50 pack — 3\"", "value": "50-3in", "priceAdd": 1400 },
+      { "label": "100 pack — 3\"", "value": "100-3in", "priceAdd": 2300 }
+    ],
+    "care": "Apply to clean, dry surfaces. Stickers are not repositionable once applied."
   },
   {
     "id": "s-006",
@@ -304,6 +356,77 @@
     "badge": null,
     "image": "/images/products/logo-package.jpg",
     "images": ["/images/products/logo-package.jpg"],
-    "description": "Full brand identity package — logo, color palette, typography, and usage guidelines."
+    "description": "Full brand identity package — logo, color palette, typography, and usage guidelines. We start with a creative brief, deliver 3 initial concepts, and refine your favorite into a complete brand kit.",
+    "features": ["Creative brief & discovery session", "3 initial logo concepts", "2 revision rounds on chosen direction", "Final logo in all formats (SVG, PNG, PDF)", "Color palette & typography guidelines", "Brand usage guide document"],
+    "materials": [],
+    "needsDesign": true,
+    "options": [
+      { "label": "Logo Only", "value": "logo-only" },
+      { "label": "Logo + Brand Kit", "value": "logo-kit", "priceAdd": 5000 },
+      { "label": "Logo + Brand Kit + Stationery", "value": "logo-kit-stationery", "priceAdd": 10000 }
+    ],
+    "care": null
+  },
+  {
+    "id": "s-007",
+    "name": "Adhesive Vinyl Print",
+    "price": 3000,
+    "division": "studio",
+    "category": "prints",
+    "badge": "New",
+    "image": "/images/products/adhesive-print.jpg",
+    "images": ["/images/products/adhesive-print.jpg"],
+    "description": "Peel-and-stick adhesive print for walls, windows, vehicles, and signage. Printed on HP Everyday Adhesive Matte Polypropylene with a smooth, professional finish. Great for storefront graphics, wall murals, and promotional displays.",
+    "features": ["HP Everyday Adhesive Matte Polypropylene", "Peel-and-stick application", "Repositionable during install", "Smooth matte finish", "Indoor rated"],
+    "materials": ["HP Everyday Adhesive Matte Polypropylene"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "12×18\"", "value": "12x18" },
+      { "label": "18×24\"", "value": "18x24", "priceAdd": 1000 },
+      { "label": "24×36\"", "value": "24x36", "priceAdd": 2500 },
+      { "label": "24×48\"", "value": "24x48", "priceAdd": 3500 }
+    ],
+    "care": "Apply to clean, smooth surfaces. Indoor use recommended for longest adhesion."
+  },
+  {
+    "id": "s-008",
+    "name": "Wood Sign — Custom",
+    "price": 3500,
+    "division": "studio",
+    "category": "signs",
+    "badge": null,
+    "image": "/images/products/wood-sign.jpg",
+    "images": ["/images/products/wood-sign.jpg"],
+    "description": "CNC-carved or laser-engraved custom wood sign. Perfect for business signage, home address plaques, event welcome signs, and personalized gifts. Made from solid wood, finished by hand.",
+    "features": ["CNC-carved or laser-engraved — your choice", "Solid wood construction", "Hand-finished with oil/wax or polyurethane", "Mounting hardware included", "Indoor or outdoor finish available"],
+    "materials": ["Walnut", "Maple", "Oak", "Pine"],
+    "acceptsUpload": true,
+    "options": [
+      { "label": "Small (8×4\")", "value": "small" },
+      { "label": "Medium (12×6\")", "value": "medium", "priceAdd": 1500 },
+      { "label": "Large (18×8\")", "value": "large", "priceAdd": 3500 },
+      { "label": "XL (24×12\")", "value": "xl", "priceAdd": 6000 }
+    ],
+    "care": "Indoor signs: wipe clean. Outdoor signs: sealed with marine-grade polyurethane — recoat annually."
+  },
+  {
+    "id": "s-009",
+    "name": "Business Cards",
+    "price": 3500,
+    "division": "studio",
+    "category": "brand",
+    "badge": null,
+    "image": "/images/products/business-cards.jpg",
+    "images": ["/images/products/business-cards.jpg"],
+    "description": "Premium business cards designed and printed to represent your brand. Thick 16pt card stock with your choice of matte or gloss finish. We design the layout — you just send your info.",
+    "features": ["16pt premium card stock", "Full-color double-sided printing", "Matte or gloss laminate finish", "Custom layout designed by us", "Standard 3.5×2\" size"],
+    "materials": ["16pt card stock"],
+    "needsDesign": true,
+    "options": [
+      { "label": "100 cards", "value": "100" },
+      { "label": "250 cards", "value": "250", "priceAdd": 1500 },
+      { "label": "500 cards", "value": "500", "priceAdd": 3000 }
+    ],
+    "care": null
   }
 ]
