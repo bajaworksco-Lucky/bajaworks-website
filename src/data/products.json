@@ -7,8 +7,8 @@
     "division": "casa",
     "category": "home",
     "badge": "New",
-    "image": "public/images/products/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set.jpg",
-    "images": ["public/images/products/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set.jpg", "public/images/products/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-2.jpg", "public/images/products/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-3.jpg", "public/images/products/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-4.jpg"],
+    "image": "/images/products/casa/C-001/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set.jpg",
+    "images": ["/images/products/casa/C-001/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set.jpg", "/images/products/casa/C-001/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-2.jpg", "/images/products/casa/C-001/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-3.jpg", "/images/products/casa/C-001/BAJA-WORKS-CO_Photoshoot_Te-Quiero-Candle-Set-4.png"],
     "description": "Say it without saying it. This set pairs our ribbed sage-green glass candle with a solid wood coaster engraved with \"te quiero\" — two hearts and a quiet message built right into the grain. The candle nests into the coaster's recessed center, glass catching the light while the bamboo lid keeps it fresh between burns. Handmade start to finish, it's the kind of gift that lingers on a nightstand long after it's given.",
     "features": ["Hand-poured ribbed green glass candle with bamboo lid", "Laser-engraved solid wood coaster"],
     "materials": ["Maple Wood", "Soy-Bamboo Blend Wax"]
