@@ -88,7 +88,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               backgroundSize: 'cover', backgroundPosition: 'center',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ fontSize: 64, color: 'rgba(26,26,26,0.06)' }}>⬡</span>
+           
             </div>
             {product.badge && (
               <span style={{
@@ -122,7 +122,6 @@ export default function ProductDetail({ product }: { product: Product }) {
                     backgroundSize: 'cover', backgroundPosition: 'center',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <span style={{ fontSize: 18, color: 'rgba(26,26,26,0.06)' }}>⬡</span>
                   </div>
                 </button>
               ))}
