@@ -70,11 +70,12 @@ export default function CasaShop() {
               >
                 <div style={{
                   height: 190,
-                  background: `linear-gradient(135deg, rgba(196,160,112,${0.06 + (i % 3) * 0.02}), rgba(168,145,122,${0.04 + (i % 3) * 0.015}))`,
+                  background: product.image
+                    ? `url(${product.image}) center/cover no-repeat`
+                    : `linear-gradient(135deg, rgba(196,160,112,${0.06 + (i % 3) * 0.02}), rgba(168,145,122,${0.04 + (i % 3) * 0.015}))`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   position: 'relative',
                 }}>
-                  <span style={{ fontSize: 36, color: 'rgba(26,26,26,0.06)' }}>⬡</span>
                   {product.badge && (
                     <span style={{
                       position: 'absolute', top: 12, left: 12,
