@@ -2,11 +2,11 @@ import { useState } from 'react';
 import products from '../../data/products.json';
 
 const CATEGORIES = [
-  { id: 'all', label: 'All', icon: '◆' },
-  { id: 'home', label: 'Home', icon: '⬡' },
-  { id: 'kids', label: 'Kids', icon: '△' },
-  { id: 'pets', label: 'Pets', icon: '◎' },
-  { id: 'gifts', label: 'Gifts & Custom', icon: '◇' },
+  { id: 'all', label: 'All' },
+  { id: 'home', label: 'Home' },
+  { id: 'kids', label: 'Kids' },
+  { id: 'pets', label: 'Pets' },
+  { id: 'gifts', label: 'Gifts & Custom' },
 ];
 
 export default function CasaShop() {
