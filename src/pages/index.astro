@@ -38,17 +38,17 @@ const badgeColor = (badge) =>
         Creative Manufacturing Studio
       </div>
 
-      <h1 class="heading-xl reveal reveal-d1" style="color:#000;">
-        BAJA<br /><span style="color:#000;">WORKS CO.</span>
+      <h1 class="heading-xl reveal reveal-d1 hero-title">
+        BAJA<br /><span>WORKS CO.</span>
       </h1>
 
-      <p class="reveal reveal-d2" style="font-size:clamp(15px,1.8vw,19px);line-height:1.65;color:#000;max-width:46ch;margin-top:30px;font-weight:300;">
+      <p class="reveal reveal-d2 hero-sub" style="font-size:clamp(15px,1.8vw,19px);line-height:1.65;max-width:46ch;margin-top:30px;font-weight:400;">
         We design and build goods by hand — home pieces, custom fabrications, graphic prints, and apparel. Every product starts as an idea in our workshop and ends up in yours.
       </p>
 
       <div class="reveal reveal-d3" style="display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;">
         <a href="/casa" class="btn-primary">Shop Casa</a>
-        <a href="/studio" class="btn-outline">Baja Studio</a>
+        <a href="/studio" class="btn-glass">Baja Studio</a>
       </div>
     </div>
   </section>
@@ -181,14 +181,71 @@ const badgeColor = (badge) =>
     background: url('/images/hero.jpg') center / cover no-repeat;
   }
   /* This is the dimmer. Increase the alpha values to darken further,
-     decrease them to brighten. 0.55 top → 0.72 bottom is a good readable default. */
+     decrease them to brighten. Kept light so the photo reads bright. */
   .hero-overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
     background:
-      linear-gradient(180deg, rgba(13, 13, 11, 0.35), rgba(13, 13, 11, 0.5)),
-      radial-gradient(ellipse 800px 460px at 12% 35%, rgba(196, 160, 112, 0.10), transparent 45%);
+      linear-gradient(180deg, rgba(13, 13, 11, 0.18), rgba(13, 13, 11, 0.32)),
+      radial-gradient(ellipse 800px 460px at 12% 35%, rgba(196, 160, 112, 0.08), transparent 45%);
+  }
+
+  /* ── Glass-black headline ──
+     Deep near-black with a subtle vertical sheen and a soft light edge,
+     so it reads like polished glass/obsidian rather than flat ink. */
+  .hero-title,
+  .hero-title span {
+    color: #0b0b0d;
+    background: linear-gradient(170deg, #2b2b30 0%, #0b0b0d 42%, #000 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* light catch on the top edge + soft depth shadow below */
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.28),
+      0 2px 10px rgba(0, 0, 0, 0.25);
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.15));
+  }
+
+  /* Glassy dark subhead — rich charcoal, not flat black, with a faint glow
+     so it stays legible on the brighter photo. */
+  .hero-sub {
+    color: #16161a;
+    text-shadow: 0 1px 6px rgba(255, 255, 255, 0.35);
+  }
+
+  /* ── Glass button (Baja Studio) ── */
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0b0b0d;
+    text-decoration: none;
+    /* frosted glass: translucent fill + blur + light top edge */
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22));
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
+    backdrop-filter: blur(10px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      0 6px 18px rgba(0, 0, 0, 0.18);
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+  }
+  .btn-glass:hover {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.32));
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 8px 22px rgba(0, 0, 0, 0.22);
   }
 
   /* ── Featured cards ── */
