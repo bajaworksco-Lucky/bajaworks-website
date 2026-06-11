@@ -1,12 +1,12 @@
 import products from '../../data/products.json';
 
 const CATEGORIES = [
-  { id: 'all', label: 'All', icon: '▣' },
-  { id: 'prints', label: 'Prints', icon: '▢' },
-  { id: 'canvas', label: 'Canvas', icon: '◻' },
-  { id: 'banners', label: 'Banners', icon: '▬' },
-  { id: 'signs', label: 'Signs', icon: '◈' },
-  { id: 'brand', label: 'Branding', icon: '◇' },
+  { id: 'all', label: 'All' },
+  { id: 'prints', label: 'Prints' },
+  { id: 'canvas', label: 'Canvas' },
+  { id: 'banners', label: 'Banners' },
+  { id: 'signs', label: 'Signs' },
+  { id: 'brand', label: 'Branding' },
 ];
 
 import { useState } from 'react';
@@ -41,7 +41,7 @@ export default function StudioShop() {
               borderBottom: active === cat.id ? '2px solid #E8753A' : '2px solid transparent',
               transition: 'all 0.2s', whiteSpace: 'nowrap',
               minHeight: 48,
-            }}>{cat.icon} {cat.label}</button>
+            }}>{cat.label}</button>
           ))}
         </div>
       </div>
@@ -66,11 +66,13 @@ export default function StudioShop() {
               >
                 <div style={{
                   height: 190,
-                  background: `linear-gradient(135deg, rgba(232,117,58,${0.04 + (i % 3) * 0.02}), rgba(196,160,112,${0.03 + (i % 3) * 0.01}))`,
+                  background: product.image
+                    ? `url(${product.image}) center/cover no-repeat`
+                    : `linear-gradient(135deg, rgba(232,117,58,${0.04 + (i % 3) * 0.02}), rgba(196,160,112,${0.03 + (i % 3) * 0.01}))`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   position: 'relative',
                 }}>
-                  <span style={{ fontSize: 36, color: 'rgba(17,17,17,0.05)' }}>▣</span>
+                  {!product.image && <span style={{ fontSize: 36, color: 'rgba(17,17,17,0.05)' }}>▣</span>}
                   {product.badge && (
                     <span style={{
                       position: 'absolute', top: 12, left: 12,
