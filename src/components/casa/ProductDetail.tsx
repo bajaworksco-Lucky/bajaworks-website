@@ -56,7 +56,7 @@ export default function ProductDetail({ product }: { product: Product }) {
     }
   };
 
-  const avgRating = (PLACEHOLDER_REVIEWS.reduce((sum, r) => sum + r.rating, 0) / PLACEHOLDER_REVIEWS.length).toFixed(1);
+  <ProductReviews productId={product.id} accent="#C4A070" /> 
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px clamp(18px, 4vw, 40px) 80px' }}>
@@ -157,23 +157,6 @@ export default function ProductDetail({ product }: { product: Product }) {
             )}
           </div>
 
-          {/* Rating Summary */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-            <div style={{ display: 'flex', gap: 2 }}>
-              {[1,2,3,4,5].map(star => (
-                <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#C4A070' : 'rgba(26,26,26,0.12)', fontSize: 16 }}>★</span>
-              ))}
-            </div>
-            <span style={{ fontSize: 13, color: 'rgba(26,26,26,0.4)' }}>
-              {avgRating} ({PLACEHOLDER_REVIEWS.length} reviews)
-            </span>
-          </div>
-
-          {product.description && (
-            <p style={{ fontSize: 14.5, lineHeight: 1.75, color: 'rgba(26,26,26,0.55)', margin: '0 0 28px', maxWidth: '52ch' }}>
-              {product.description}
-            </p>
-          )}
 
           {/* Options */}
           {product.options && product.options.length > 0 && (
