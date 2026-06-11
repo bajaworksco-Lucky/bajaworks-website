@@ -473,7 +473,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 background: 'rgba(196,160,112,0.08)', border: `1px solid ${ACCENT}40`,
                 fontSize: 14, color: 'rgba(26,26,26,0.65)', lineHeight: 1.6,
               }}>
-                Thanks for your review! It'll appear here once it's been checked over — usually within a day.
+                Thanks for your review!
               </div>
             )}
 
