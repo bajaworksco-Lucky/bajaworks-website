@@ -17,7 +17,7 @@ import '../styles/global.css';
 
       <!-- Checkmark -->
       <div class="reveal" style="width:78px;height:78px;margin:0 auto 32px;border-radius:50%;border:2px solid #C4A070;display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:36px;color:#C4A070;line-height:1;">✓</span>
+        <span style="font-size:36px;color:#C4A070;line-height:1;">&#10003;</span>
       </div>
 
       <div class="label-accent reveal reveal-d1" style="margin-bottom:18px;">Order Confirmed</div>
@@ -50,9 +50,12 @@ import '../styles/global.css';
   <!-- Clear the cart now that the order is placed -->
   <script is:inline>
     try {
-      localStorage.removeItem('bajaworks_cart');
-      if (window.clearCart) window.clearCart();
-      document.querySelectorAll('#cart-badge, #cart-badge-p').forEach(function (b) {
+      // Cart is stored in sessionStorage under 'bw-cart' (see CartDrawer.tsx)
+      sessionStorage.removeItem('bw-cart');
+      // Let any live cart components know it's now empty
+      window.dispatchEvent(new CustomEvent('cart-updated', { detail: [] }));
+      // Hide the nav cart badges
+      document.querySelectorAll('#cart-badge-d, #cart-badge-m, #cart-badge-p, #cart-count').forEach(function (b) {
         b.style.display = 'none';
         b.textContent = '0';
       });
