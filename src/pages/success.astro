@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import RevealScript from '../components/shared/RevealScript.astro';
+import '../styles/global.css';
+---
+
+<BaseLayout title="Order Confirmed | Baja Works Co." description="Thank you for your order.">
+  <Navbar theme="dark" />
+  <div class="grain"></div>
+
+  <section style="position:relative;overflow:hidden;min-height:72vh;display:flex;align-items:center;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 700px 420px at 50% 30%,rgba(196,160,112,0.10),transparent 55%);"></div>
+
+    <div class="container" style="position:relative;z-index:2;text-align:center;padding:72px 0;">
+
+      <!-- Checkmark -->
+      <div class="reveal" style="width:78px;height:78px;margin:0 auto 32px;border-radius:50%;border:2px solid #C4A070;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:36px;color:#C4A070;line-height:1;">✓</span>
+      </div>
+
+      <div class="label-accent reveal reveal-d1" style="margin-bottom:18px;">Order Confirmed</div>
+
+      <h1 class="heading-xl reveal reveal-d1" style="font-size:clamp(40px,7vw,78px);margin:0 0 22px;">
+        Thank You
+      </h1>
+
+      <p class="reveal reveal-d2" style="font-size:clamp(15px,1.8vw,18px);line-height:1.7;color:rgba(232,228,223,0.5);max-width:50ch;margin:0 auto 14px;font-weight:300;">
+        Your order's in — we've received it and a confirmation is on its way to your email. Every piece is made by hand in our workshop, so we'll get to work shortly.
+      </p>
+
+      <p class="reveal reveal-d2" style="font-size:14px;line-height:1.7;color:rgba(232,228,223,0.35);max-width:48ch;margin:0 auto 40px;font-weight:300;">
+        Ordered something custom or personalized? Email your artwork, photos, or engraving details to
+        <a href="mailto:bajaworksco@gmail.com?subject=Custom%20order%20files" style="color:#C4A070;text-decoration:none;border-bottom:1px solid rgba(196,160,112,0.4);">bajaworksco@gmail.com</a>
+        and we'll match it to your order.
+      </p>
+
+      <div class="reveal reveal-d2" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="/casa" class="btn-primary">Continue Shopping</a>
+        <a href="/" style="display:inline-flex;align-items:center;padding:13px 28px;border-radius:4px;border:1px solid rgba(232,228,223,0.18);color:rgba(232,228,223,0.7);text-decoration:none;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;">Back Home</a>
+      </div>
+
+    </div>
+  </section>
+
+  <Footer />
+  <RevealScript />
+
+  <!-- Clear the cart now that the order is placed -->
+  <script is:inline>
+    try {
+      localStorage.removeItem('bajaworks_cart');
+      if (window.clearCart) window.clearCart();
+      document.querySelectorAll('#cart-badge, #cart-badge-p').forEach(function (b) {
+        b.style.display = 'none';
+        b.textContent = '0';
+      });
+    } catch (e) {}
+  </script>
+</BaseLayout>
