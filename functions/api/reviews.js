@@ -75,7 +75,7 @@ export async function onRequestPost({ request, env }) {
       },
       body: JSON.stringify({
         from: "Baja Works Reviews <reviews@bajaworksco.com>",
-        to: [env.NOTIFY_EMAIL],
+        to: [env.REVIEWS_EMAIL],
         subject: `New review pending: ${productId} — ${starsDisplay}`,
         html: `
           <div style="font-family:sans-serif;max-width:520px;">
