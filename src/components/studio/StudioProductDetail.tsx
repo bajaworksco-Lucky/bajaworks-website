@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface ProductOption {
   label: string;
@@ -22,13 +22,22 @@ interface Product {
   care?: string | null;
   acceptsUpload?: boolean;
   needsDesign?: boolean;
+  // 'inline'  → small drag-and-drop box (default)
+  // 'drive'   → ask customer to send a Drive/WeTransfer link (large/hi-res files)
+  // 'none'    → no upload UI at all
+  uploadMethod?: 'inline' | 'drive' | 'none';
+  uploadNote?: string; // optional custom instruction line under the uploader
 }
 
-const PLACEHOLDER_REVIEWS = [
-  { author: 'Carlos M.', rating: 5, date: 'Mar 2026', text: 'Ordered a banner for our shop opening — the colors were incredible and it arrived faster than expected. Professional quality all around.' },
-  { author: 'Priya S.', rating: 5, date: 'Feb 2026', text: 'Had them design a logo package for my business. The concepts were sharp and the final files were exactly what I needed. Worth every dollar.' },
-  { author: 'Alex D.', rating: 4, date: 'Jan 2026', text: 'Great print quality on the canvas. Took a few extra days since I needed a revision on the layout, but the team was super responsive.' },
-];
+interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  text: string;
+  created_at: string;
+}
+
+const ACCENT = '#E8753A';
 
 export default function StudioProductDetail({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -41,10 +50,45 @@ export default function StudioProductDetail({ product }: { product: Product }) {
   const [designNotes, setDesignNotes] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Reviews state
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [rAuthor, setRAuthor] = useState('');
+  const [rRating, setRRating] = useState(0);
+  const [rHover, setRHover] = useState(0);
+  const [rText, setRText] = useState('');
+  const [rWebsite, setRWebsite] = useState(''); // honeypot
+  const [rSubmitting, setRSubmitting] = useState(false);
+  const [rSubmitted, setRSubmitted] = useState(false);
+  const [rError, setRError] = useState('');
+
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
   const optionPriceAdd = product.options?.find(o => o.value === selectedOption)?.priceAdd || 0;
   const designFee = (!product.needsDesign && needsDesign) ? 2500 : 0; // $25 design fee if opting in
   const totalPrice = product.price + optionPriceAdd + designFee;
+
+  // Resolve upload method: explicit field wins, else fall back to old acceptsUpload behavior
+  const uploadMethod: 'inline' | 'drive' | 'none' =
+    product.uploadMethod || (product.acceptsUpload ? 'inline' : 'none');
+
+  useEffect(() => {
+    fetch(`/api/reviews?product_id=${encodeURIComponent(product.id)}`)
+      .then(res => res.json())
+      .then(data => setReviews(data.reviews || []))
+      .catch(() => setReviews([]))
+      .finally(() => setReviewsLoading(false));
+  }, [product.id]);
+
+  const reviewCount = reviews.length;
+  const avgRating = reviewCount
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount).toFixed(1)
+    : null;
+
+  const formatDate = (iso: string) => {
+    const d = new Date(iso.replace(' ', 'T') + 'Z');
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -76,7 +120,49 @@ export default function StudioProductDetail({ product }: { product: Product }) {
     }
   };
 
-  const avgRating = (PLACEHOLDER_REVIEWS.reduce((sum, r) => sum + r.rating, 0) / PLACEHOLDER_REVIEWS.length).toFixed(1);
+  const submitReview = async () => {
+    setRError('');
+    if (!rAuthor.trim()) { setRError('Please add your name.'); return; }
+    if (rRating === 0) { setRError('Please pick a star rating.'); return; }
+    if (rText.trim().length < 10) { setRError('Please write at least a sentence.'); return; }
+
+    setRSubmitting(true);
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product.id,
+          author: rAuthor.trim(),
+          rating: rRating,
+          text: rText.trim(),
+          website: rWebsite,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setRError(data.error || 'Something went wrong. Please try again.');
+      } else {
+        setRSubmitted(true);
+        setShowForm(false);
+      }
+    } catch {
+      setRError('Could not submit. Check your connection and try again.');
+    } finally {
+      setRSubmitting(false);
+    }
+  };
+
+  const fieldLabel: React.CSSProperties = {
+    fontSize: 11, letterSpacing: 2, textTransform: 'uppercase',
+    color: 'rgba(17,17,17,0.35)', marginBottom: 8, fontWeight: 500, display: 'block',
+  };
+  const fieldInput: React.CSSProperties = {
+    width: '100%', padding: '11px 14px', borderRadius: 6,
+    border: '1px solid rgba(17,17,17,0.15)', background: '#fff',
+    fontFamily: "'Outfit', sans-serif", fontSize: 14, color: '#111',
+    outline: 'none', boxSizing: 'border-box',
+  };
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px clamp(18px, 4vw, 40px) 80px' }}>
@@ -84,9 +170,9 @@ export default function StudioProductDetail({ product }: { product: Product }) {
       {/* Breadcrumb */}
       <nav style={{ fontSize: 12.5, color: 'rgba(17,17,17,0.35)', marginBottom: 28, display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         <a href="/" style={{ color: 'rgba(17,17,17,0.35)' }}>Home</a>
-        <span>›</span>
+        <span>&rsaquo;</span>
         <a href="/studio" style={{ color: 'rgba(17,17,17,0.35)' }}>Baja Studio</a>
-        <span>›</span>
+        <span>&rsaquo;</span>
         <span style={{ color: '#111' }}>{product.name}</span>
       </nav>
 
@@ -108,7 +194,6 @@ export default function StudioProductDetail({ product }: { product: Product }) {
               backgroundSize: 'cover', backgroundPosition: 'center',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ fontSize: 64, color: 'rgba(17,17,17,0.05)' }}>▣</span>
             </div>
             {product.badge && (
               <span style={{
@@ -140,9 +225,7 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                     width: '100%', height: '100%',
                     backgroundImage: `url(${img})`,
                     backgroundSize: 'cover', backgroundPosition: 'center',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <span style={{ fontSize: 18, color: 'rgba(17,17,17,0.05)' }}>▣</span>
                   </div>
                 </button>
               ))}
@@ -156,7 +239,7 @@ export default function StudioProductDetail({ product }: { product: Product }) {
             fontSize: 10.5, letterSpacing: 2.5, textTransform: 'uppercase',
             color: '#E8753A', fontWeight: 500, marginBottom: 10,
           }}>
-            Baja Studio · {product.category}
+            Baja Studio &middot; {product.category}
           </div>
 
           <h1 style={{
@@ -212,17 +295,22 @@ export default function StudioProductDetail({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Rating Summary */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-            <div style={{ display: 'flex', gap: 2 }}>
-              {[1,2,3,4,5].map(star => (
-                <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#E8753A' : 'rgba(17,17,17,0.1)', fontSize: 16 }}>★</span>
-              ))}
+          {/* Rating Summary — only when real reviews exist */}
+          {avgRating && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
+              <div style={{ display: 'flex', gap: 2 }}>
+                {[1,2,3,4,5].map(star => (
+                  <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#E8753A' : 'rgba(17,17,17,0.1)', fontSize: 16 }}>★</span>
+                ))}
+              </div>
+              <button
+                onClick={() => setActiveTab('reviews')}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'rgba(17,17,17,0.4)' }}
+              >
+                {avgRating} ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
+              </button>
             </div>
-            <span style={{ fontSize: 13, color: 'rgba(17,17,17,0.4)' }}>
-              {avgRating} ({PLACEHOLDER_REVIEWS.length} reviews)
-            </span>
-          </div>
+          )}
 
           {product.description && (
             <p style={{ fontSize: 14.5, lineHeight: 1.75, color: 'rgba(17,17,17,0.55)', margin: '0 0 28px', maxWidth: '52ch' }}>
@@ -269,8 +357,8 @@ export default function StudioProductDetail({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Upload your artwork */}
-          {product.acceptsUpload && (
+          {/* ── UPLOAD: inline drag-and-drop box ── */}
+          {uploadMethod === 'inline' && (
             <div style={{ marginBottom: 24 }}>
               <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(17,17,17,0.35)', marginBottom: 10, fontWeight: 500 }}>
                 Your Artwork
@@ -300,7 +388,7 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                     Upload your image or design file
                   </div>
                   <div style={{ fontSize: 12, color: 'rgba(17,17,17,0.35)' }}>
-                    PNG, JPG, PDF, AI, or PSD — up to 50MB
+                    {product.uploadNote || 'PNG, JPG, PDF, AI, or PSD — up to 50MB'}
                   </div>
                 </div>
               ) : (
@@ -335,7 +423,65 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                 style={{ display: 'none' }}
               />
 
-              {/* Design help toggle — only show if product accepts uploads (not already a design service) */}
+              {/* Design help toggle */}
+              {!product.needsDesign && (
+                <div style={{ marginTop: 12 }}>
+                  <label style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer',
+                    padding: '12px 14px', borderRadius: 6,
+                    border: needsDesign ? '1px solid rgba(232,117,58,0.25)' : '1px solid rgba(17,17,17,0.08)',
+                    background: needsDesign ? 'rgba(232,117,58,0.04)' : 'transparent',
+                    transition: 'all 0.2s',
+                  }}>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: 4, flexShrink: 0, marginTop: 1,
+                      border: needsDesign ? '2px solid #E8753A' : '2px solid rgba(17,17,17,0.15)',
+                      background: needsDesign ? '#E8753A' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.2s',
+                    }}>
+                      {needsDesign && <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>✓</span>}
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={needsDesign}
+                      onChange={(e) => setNeedsDesign(e.target.checked)}
+                      style={{ display: 'none' }}
+                    />
+                    <div>
+                      <div style={{ fontSize: 13.5, fontWeight: 500, color: '#111' }}>
+                        I need design help (+$25.00)
+                      </div>
+                      <div style={{ fontSize: 12, color: 'rgba(17,17,17,0.4)', marginTop: 2, lineHeight: 1.5 }}>
+                        Don't have artwork ready? We'll design it for you. Includes one revision round.
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── UPLOAD: Google Drive / link method (large hi-res files) ── */}
+          {uploadMethod === 'drive' && (
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(17,17,17,0.35)', marginBottom: 10, fontWeight: 500 }}>
+                Sending Your Files
+              </div>
+              <div style={{
+                padding: '16px 18px', borderRadius: 8,
+                border: '1px solid rgba(232,117,58,0.2)',
+                background: 'rgba(232,117,58,0.04)',
+                fontSize: 13.5, color: 'rgba(17,17,17,0.6)', lineHeight: 1.65,
+              }}>
+                <div style={{ fontWeight: 600, color: '#111', marginBottom: 6 }}>
+                  Large files? Send a link — don't lose quality.
+                </div>
+                {product.uploadNote ||
+                  'For best print results we need full-resolution files. After checkout, upload your artwork to Google Drive, Dropbox, or WeTransfer and email the share link to bajaworksco@gmail.com with your order number. We\'ll confirm the file looks good before printing.'}
+              </div>
+
+              {/* Optional design help still available */}
               {!product.needsDesign && (
                 <div style={{ marginTop: 12 }}>
                   <label style={{
@@ -449,9 +595,9 @@ export default function StudioProductDetail({ product }: { product: Product }) {
             background: 'rgba(232,117,58,0.03)',
             fontSize: 12.5, color: 'rgba(17,17,17,0.4)', lineHeight: 1.6,
           }}>
-            {product.acceptsUpload || product.needsDesign ? (
+            {uploadMethod !== 'none' || product.needsDesign ? (
               <>
-                <strong style={{ color: 'rgba(17,17,17,0.55)' }}>How it works:</strong> Place your order, then email your files or details to <a href="mailto:bajaworksco@gmail.com" style={{ color: '#E8753A', fontWeight: 500 }}>bajaworksco@gmail.com</a> with your order number. We'll confirm everything before production begins.
+                <strong style={{ color: 'rgba(17,17,17,0.55)' }}>How it works:</strong> Place your order, then send your files or details to <a href="mailto:bajaworksco@gmail.com" style={{ color: '#E8753A', fontWeight: 500 }}>bajaworksco@gmail.com</a> with your order number. We'll confirm everything before production begins.
               </>
             ) : (
               <>
@@ -482,7 +628,7 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                 transition: 'all 0.2s',
               }}
             >
-              {tab === 'details' ? 'Details & Specs' : `Reviews (${PLACEHOLDER_REVIEWS.length})`}
+              {tab === 'details' ? 'Details & Specs' : `Reviews${reviewCount ? ` (${reviewCount})` : ''}`}
             </button>
           ))}
         </div>
@@ -517,14 +663,16 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                 </div>
               )}
 
-              {/* Accepted file types for upload products */}
-              {product.acceptsUpload && (
+              {/* File guidance for upload products */}
+              {uploadMethod !== 'none' && (
                 <div>
                   <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(17,17,17,0.3)', marginBottom: 14, fontWeight: 500 }}>
                     Accepted File Types
                   </div>
                   <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.55)', lineHeight: 1.7, margin: 0 }}>
-                    PNG, JPG, PDF, AI, PSD, SVG, TIFF. For best results, send files at 300 DPI or higher at the intended print size. Not sure? Email us and we'll check your file.
+                    {uploadMethod === 'drive'
+                      ? 'PNG, JPG, TIFF, PDF, AI, PSD — at full resolution. Large files: share via Google Drive, Dropbox, or WeTransfer so nothing gets compressed. Aim for 300 DPI at final print size.'
+                      : 'PNG, JPG, PDF, AI, PSD, SVG, TIFF. For best results, send files at 300 DPI or higher at the intended print size. Not sure? Email us and we\'ll check your file.'}
                   </p>
                 </div>
               )}
@@ -534,42 +682,173 @@ export default function StudioProductDetail({ product }: { product: Product }) {
 
         {activeTab === 'reviews' && (
           <div style={{ maxWidth: 700 }}>
-            {/* Rating Overview */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32,
-              padding: '20px 24px', borderRadius: 8,
-              border: '1px solid rgba(17,17,17,0.06)', background: 'rgba(232,117,58,0.02)',
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: '#111', lineHeight: 1 }}>{avgRating}</div>
-                <div style={{ display: 'flex', gap: 2, justifyContent: 'center', marginTop: 4 }}>
-                  {[1,2,3,4,5].map(star => (
-                    <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#E8753A' : 'rgba(17,17,17,0.1)', fontSize: 14 }}>★</span>
-                  ))}
-                </div>
-                <div style={{ fontSize: 11, color: 'rgba(17,17,17,0.35)', marginTop: 4 }}>{PLACEHOLDER_REVIEWS.length} reviews</div>
-              </div>
-              <div style={{ flex: 1 }}>
-                {[5,4,3,2,1].map(stars => {
-                  const count = PLACEHOLDER_REVIEWS.filter(r => r.rating === stars).length;
-                  const pct = (count / PLACEHOLDER_REVIEWS.length) * 100;
-                  return (
-                    <div key={stars} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                      <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.35)', width: 14, textAlign: 'right' }}>{stars}</span>
-                      <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(17,17,17,0.06)', overflow: 'hidden' }}>
-                        <div style={{ width: `${pct}%`, height: '100%', borderRadius: 3, background: '#E8753A', transition: 'width 0.3s' }} />
-                      </div>
-                      <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.25)', width: 20 }}>{count}</span>
+
+            {/* Header row: summary + write button */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>
+              {avgRating ? (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 20,
+                  padding: '20px 24px', borderRadius: 8,
+                  border: '1px solid rgba(17,17,17,0.06)', background: 'rgba(232,117,58,0.02)',
+                  flex: '1 1 320px',
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: '#111', lineHeight: 1 }}>{avgRating}</div>
+                    <div style={{ display: 'flex', gap: 2, justifyContent: 'center', marginTop: 4 }}>
+                      {[1,2,3,4,5].map(star => (
+                        <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#E8753A' : 'rgba(17,17,17,0.1)', fontSize: 14 }}>★</span>
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
+                    <div style={{ fontSize: 11, color: 'rgba(17,17,17,0.35)', marginTop: 4 }}>{reviewCount} review{reviewCount !== 1 ? 's' : ''}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    {[5,4,3,2,1].map(stars => {
+                      const count = reviews.filter(r => r.rating === stars).length;
+                      const pct = reviewCount ? (count / reviewCount) * 100 : 0;
+                      return (
+                        <div key={stars} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                          <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.35)', width: 14, textAlign: 'right' }}>{stars}</span>
+                          <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(17,17,17,0.06)', overflow: 'hidden' }}>
+                            <div style={{ width: `${pct}%`, height: '100%', borderRadius: 3, background: '#E8753A', transition: 'width 0.3s' }} />
+                          </div>
+                          <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.25)', width: 20 }}>{count}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.4)', margin: 0 }}>
+                  {reviewsLoading ? 'Loading reviews…' : 'No reviews yet — be the first to share one.'}
+                </p>
+              )}
+
+              {!rSubmitted && !showForm && (
+                <button
+                  onClick={() => setShowForm(true)}
+                  style={{
+                    padding: '11px 22px', borderRadius: 6, cursor: 'pointer',
+                    border: `1.5px solid ${ACCENT}`, background: 'transparent', color: '#111',
+                    fontFamily: "'Outfit', sans-serif", fontSize: 12, fontWeight: 600,
+                    letterSpacing: 1, textTransform: 'uppercase', whiteSpace: 'nowrap',
+                  }}
+                >
+                  Write a Review
+                </button>
+              )}
             </div>
 
-            {PLACEHOLDER_REVIEWS.map((review, i) => (
-              <div key={i} style={{
+            {/* Thank-you state */}
+            {rSubmitted && (
+              <div style={{
+                padding: '16px 20px', borderRadius: 8, marginBottom: 28,
+                background: 'rgba(232,117,58,0.08)', border: `1px solid ${ACCENT}40`,
+                fontSize: 14, color: 'rgba(17,17,17,0.65)', lineHeight: 1.6,
+              }}>
+                Thanks for your review! It'll appear here once it's been checked over — usually within a day.
+              </div>
+            )}
+
+            {/* Submission form */}
+            {showForm && !rSubmitted && (
+              <div style={{
+                padding: '22px 22px 24px', borderRadius: 10, marginBottom: 32,
+                background: 'rgba(17,17,17,0.025)', border: '1px solid rgba(17,17,17,0.08)',
+              }}>
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Rating</span>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <button
+                        key={star}
+                        onClick={() => setRRating(star)}
+                        onMouseEnter={() => setRHover(star)}
+                        onMouseLeave={() => setRHover(0)}
+                        aria-label={`${star} star${star > 1 ? 's' : ''}`}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer', padding: 2,
+                          fontSize: 26, lineHeight: 1,
+                          color: star <= (rHover || rRating) ? ACCENT : 'rgba(17,17,17,0.15)',
+                          transition: 'color 0.15s',
+                        }}
+                      >★</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Name</span>
+                  <input
+                    type="text"
+                    value={rAuthor}
+                    onChange={e => setRAuthor(e.target.value)}
+                    placeholder="First name, last initial — e.g. Carlos M."
+                    maxLength={60}
+                    style={fieldInput}
+                  />
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Review</span>
+                  <textarea
+                    value={rText}
+                    onChange={e => setRText(e.target.value)}
+                    placeholder="How was the print quality, turnaround, and service? Would you order again?"
+                    maxLength={1200}
+                    rows={4}
+                    style={{ ...fieldInput, resize: 'vertical', minHeight: 90 }}
+                  />
+                </div>
+
+                {/* Honeypot */}
+                <input
+                  type="text"
+                  value={rWebsite}
+                  onChange={e => setRWebsite(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
+                />
+
+                {rError && (
+                  <p style={{ fontSize: 13, color: '#C0392B', margin: '0 0 14px' }}>{rError}</p>
+                )}
+
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button
+                    onClick={submitReview}
+                    disabled={rSubmitting}
+                    style={{
+                      padding: '12px 28px', borderRadius: 6, border: 'none',
+                      background: rSubmitting ? 'rgba(17,17,17,0.3)' : '#111', color: '#F2F0EC',
+                      cursor: rSubmitting ? 'default' : 'pointer',
+                      fontFamily: "'Outfit', sans-serif", fontSize: 12.5, fontWeight: 600,
+                      letterSpacing: 1.5, textTransform: 'uppercase',
+                    }}
+                  >
+                    {rSubmitting ? 'Sending…' : 'Submit Review'}
+                  </button>
+                  <button
+                    onClick={() => { setShowForm(false); setRError(''); }}
+                    style={{
+                      padding: '12px 20px', borderRadius: 6, cursor: 'pointer',
+                      border: '1px solid rgba(17,17,17,0.15)', background: 'transparent',
+                      color: 'rgba(17,17,17,0.5)', fontFamily: "'Outfit', sans-serif",
+                      fontSize: 12.5, fontWeight: 500, letterSpacing: 1, textTransform: 'uppercase',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Review list */}
+            {reviews.map((review, i) => (
+              <div key={review.id} style={{
                 padding: '20px 0',
-                borderBottom: i < PLACEHOLDER_REVIEWS.length - 1 ? '1px solid rgba(17,17,17,0.06)' : 'none',
+                borderBottom: i < reviews.length - 1 ? '1px solid rgba(17,17,17,0.06)' : 'none',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -590,7 +869,7 @@ export default function StudioProductDetail({ product }: { product: Product }) {
                       </div>
                     </div>
                   </div>
-                  <span style={{ fontSize: 11.5, color: 'rgba(17,17,17,0.25)' }}>{review.date}</span>
+                  <span style={{ fontSize: 11.5, color: 'rgba(17,17,17,0.25)' }}>{formatDate(review.created_at)}</span>
                 </div>
                 <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(17,17,17,0.55)', margin: 0 }}>
                   {review.text}
