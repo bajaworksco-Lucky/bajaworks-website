@@ -4,7 +4,21 @@ import Navbar from '../components/shared/Navbar.astro';
 import Footer from '../components/shared/Footer.astro';
 import RevealScript from '../components/shared/RevealScript.astro';
 import CartDrawer from '../components/shared/CartDrawer.tsx';
+import products from '../data/products.json';
 import '../styles/global.css';
+
+// --- Featured products: pick by ID, pulled live from products.json ---
+const FEATURED_IDS = ['c-010', 'c-013', 'c-000', 'c-001', 's-002', 's-004'];
+const featured = FEATURED_IDS
+  .map((id) => products.find((p) => p.id === id))
+  .filter(Boolean);
+
+const href = (p) => (p.division === 'studio' ? `/studio/${p.id}` : `/casa/${p.id}`);
+const hasOptions = (p) => p.options && p.options.length > 1;
+const priceLabel = (p) =>
+  `${p.division === 'studio' && hasOptions(p) ? 'Starting at ' : ''}$${(p.price / 100).toFixed(2)}`;
+const badgeColor = (badge) =>
+  badge === 'New' ? '#C4A070' : badge === 'Best Seller' ? '#E8753A' : 'rgba(139,109,79,0.85)';
 ---
 
 <BaseLayout title="BAJA WORKS CO." description="Creative manufacturing studio — handcrafted goods, design, and apparel. Made in San Diego.">
@@ -15,12 +29,9 @@ import '../styles/global.css';
   <div class="grain"></div>
 
   <!-- ═══ HERO ═══ -->
-  <section style="position:relative;overflow:hidden;min-height:min(88vh,720px);display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,0.05);background:url('/images/hero.jpg') center/cover no-repeat;">
-    <!-- BG gradients -->
-  <!--  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,11,0.7),rgba(13,13,11,0.85)),radial-gradient(ellipse 800px 460px at 12% 35%,rgba(196,160,112,0.12),transparent 45%);"></div> -->
-    <!-- Decorative lines -->
-     <!--  <div style="position:absolute;top:38%;left:0;right:0;height:1px;background:rgba(196,160,112,0.04);"></div> -->
-     <!-- <div style="position:absolute;top:62%;left:0;right:0;height:1px;background:rgba(196,160,112,0.03);"></div> -->
+  <section class="hero-section">
+    <!-- Darkening overlay so the headline stays readable over the photo -->
+    <div class="hero-overlay"></div>
 
     <div class="container" style="position:relative;z-index:2;padding-top:80px;padding-bottom:80px;width:100%;">
       <div class="label-accent reveal" style="margin-bottom:28px;">
@@ -28,10 +39,10 @@ import '../styles/global.css';
       </div>
 
       <h1 class="heading-xl reveal reveal-d1">
-        BAJA<br /><span style="color:rgba(232,228,223,0.3);">WORKS CO.</span>
+        BAJA<br /><span style="color:rgba(232,228,223,0.45);">WORKS CO.</span>
       </h1>
 
-      <p class="reveal reveal-d2" style="font-size:clamp(15px,1.8vw,19px);line-height:1.65;color:rgba(232,228,223,0.45);max-width:46ch;margin-top:30px;font-weight:300;">
+      <p class="reveal reveal-d2" style="font-size:clamp(15px,1.8vw,19px);line-height:1.65;color:rgba(232,228,223,0.7);max-width:46ch;margin-top:30px;font-weight:300;">
         We design and build goods by hand — home pieces, custom fabrications, graphic prints, and apparel. Every product starts as an idea in our workshop and ends up in yours.
       </p>
 
@@ -55,7 +66,7 @@ import '../styles/global.css';
             <h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin:0 0 12px;">Casa Baja</h3>
             <p style="font-size:13.5px;line-height:1.7;color:rgba(232,228,223,0.4);margin:0;">Handcrafted goods for home, kids, pets, and gifting. Coasters, clocks, organizers, charcuterie boards — made from wood, metal, and real materials.</p>
           </div>
-          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4A070;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">→</span></div>
+          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4A070;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">&rarr;</span></div>
         </a>
 
         <a href="/studio" class="division-card reveal reveal-d1">
@@ -64,7 +75,7 @@ import '../styles/global.css';
             <h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin:0 0 12px;">Baja Studio</h3>
             <p style="font-size:13.5px;line-height:1.7;color:rgba(232,228,223,0.4);margin:0;">Visual and print work — posters, banners, canvas art, photo collages, branding packages, stickers, and event graphics.</p>
           </div>
-          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">→</span></div>
+          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#E8753A;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">&rarr;</span></div>
         </a>
 
         <a href="/threads" class="division-card reveal reveal-d2">
@@ -73,8 +84,56 @@ import '../styles/global.css';
             <h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin:0 0 12px;">Baja Threads</h3>
             <p style="font-size:13.5px;line-height:1.7;color:rgba(232,228,223,0.4);margin:0;">Minimal streetwear rooted in desert culture. T-shirts, hoodies, hats, and limited drops. Coming soon.</p>
           </div>
-          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B9E6B;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">→</span></div>
+          <div style="margin-top:22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B9E6B;display:flex;align-items:center;gap:8px;">Explore <span style="font-size:15px;">&rarr;</span></div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURED PRODUCTS ═══ -->
+  <section class="section" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div class="container">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:44px;">
+        <div>
+          <div class="label-sm reveal" style="margin-bottom:10px;">From the Workshop</div>
+          <h2 class="heading-lg reveal reveal-d1" style="margin:0;">Featured Pieces</h2>
+        </div>
+        <a href="/casa" class="reveal reveal-d2" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4A070;display:flex;align-items:center;gap:8px;text-decoration:none;">
+          Shop All <span style="font-size:15px;">&rarr;</span>
+        </a>
+      </div>
+
+      <div class="featured-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+        {featured.map((product, i) => (
+          <a
+            href={href(product)}
+            class={`featured-card reveal${i % 3 === 1 ? ' reveal-d1' : i % 3 === 2 ? ' reveal-d2' : ''}`}
+          >
+            <div class="featured-card__img" style={`background:url(${product.image}) center/cover no-repeat, linear-gradient(135deg, rgba(196,160,112,0.08), rgba(168,145,122,0.05));`}>
+              {product.badge && (
+                <span style={`position:absolute;top:12px;left:12px;padding:3px 10px;border-radius:3px;background:${badgeColor(product.badge)};color:#fff;font-size:10.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;`}>
+                  {product.badge}
+                </span>
+              )}
+            </div>
+            <div style="padding:18px 18px 20px;">
+              <div style={`font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;margin-bottom:8px;color:${product.division === 'studio' ? '#E8753A' : '#C4A070'};`}>
+                {product.division === 'studio' ? 'Baja Studio' : 'Casa Baja'}
+              </div>
+              <h3 style="font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:1.5px;margin:0 0 6px;color:rgba(232,228,223,0.9);">
+                {product.name}
+              </h3>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+                <span style="font-size:14.5px;font-weight:600;color:rgba(232,228,223,0.55);">
+                  {priceLabel(product)}
+                </span>
+                <span style="font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(232,228,223,0.3);">
+                  View &rarr;
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -86,7 +145,7 @@ import '../styles/global.css';
       <div class="reveal">
         <div style="width:44px;height:1px;background:#C4A070;margin:0 auto 30px;"></div>
         <blockquote style="font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3.8vw,40px);letter-spacing:2.5px;line-height:1.25;color:rgba(232,228,223,0.75);margin:0;">
-          "We don't just make things —<br />we make things that matter."
+          "We don't just make things &mdash;<br />we make things that matter."
         </blockquote>
         <p style="font-size:14.5px;line-height:1.85;color:rgba(232,228,223,0.3);margin-top:28px;max-width:50ch;margin-left:auto;margin-right:auto;">
           Every piece that leaves our workshop carries something real — the grain of the wood, the precision of the cut, the thought behind the design. We build for people who care about what they surround themselves with.
@@ -109,3 +168,53 @@ import '../styles/global.css';
   <Footer />
   <RevealScript />
 </BaseLayout>
+
+<style>
+  /* ── Hero with darkening overlay ── */
+  .hero-section {
+    position: relative;
+    overflow: hidden;
+    min-height: min(88vh, 720px);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: url('/images/hero.jpg') center / cover no-repeat;
+  }
+  /* This is the dimmer. Increase the alpha values to darken further,
+     decrease them to brighten. 0.55 top → 0.72 bottom is a good readable default. */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(13, 13, 11, 0.55), rgba(13, 13, 11, 0.72)),
+      radial-gradient(ellipse 800px 460px at 12% 35%, rgba(196, 160, 112, 0.10), transparent 45%);
+  }
+
+  /* ── Featured cards ── */
+  .featured-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .featured-card:hover {
+    border-color: rgba(196, 160, 112, 0.35);
+    transform: translateY(-3px);
+  }
+  .featured-card__img {
+    height: 210px;
+    position: relative;
+  }
+
+  @media (max-width: 900px) {
+    .featured-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 560px) {
+    .featured-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
