@@ -1,12 +1,6 @@
 // functions/api/stripe-webhook.js
 // Emails you a full order summary the moment a checkout completes.
-//
-// Setup:
-// 1. Stripe Dashboard → Developers → Webhooks → Add endpoint
-//    URL: https://bajaworksco.com/api/stripe-webhook
-//    Event: checkout.session.completed
-// 2. Copy the signing secret into Cloudflare Pages env var STRIPE_WEBHOOK_SECRET
-// 3. Uses the same RESEND_API_KEY / NOTIFY_EMAIL / STRIPE_SECRET_KEY env vars
+
 
 import Stripe from "stripe";
 
@@ -17,8 +11,6 @@ export async function onRequestPost({ request, env }) {
 
   let event;
   try {
-    // NOTE: must be the Async variant — the sync version doesn't work in
-    // the Cloudflare Workers runtime (no synchronous crypto).
     event = await stripe.webhooks.constructEventAsync(
       payload,
       signature,
@@ -59,7 +51,7 @@ export async function onRequestPost({ request, env }) {
         },
         body: JSON.stringify({
           from: "Baja Works Orders <orders@bajaworksco.com>",
-          to: [env.NOTIFY_EMAIL],
+          to: [env.ORDERS_EMAIL],
           subject: `💰 New order — $${total}`,
           html: `
             <div style="font-family:sans-serif;max-width:520px;">
