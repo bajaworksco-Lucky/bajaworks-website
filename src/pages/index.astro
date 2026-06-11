@@ -7,9 +7,33 @@ import CartDrawer from '../components/shared/CartDrawer.tsx';
 import products from '../data/products.json';
 import '../styles/global.css';
 
-// --- Featured products: pick by ID, pulled live from products.json ---
+// ─────────────────────────────────────────────────────────────
+// SEASONAL EVENT — the only thing you edit to run a promotion.
+// To turn it ON:  set SEASONAL_EVENT to an object (see example).
+// To turn it OFF: set SEASONAL_EVENT = null;  → the section falls
+//                 back to the regular "Featured Pieces" row.
+//
+// Example (Father's Day):
+//   const SEASONAL_EVENT = {
+//     eyebrow: 'Limited Time',
+//     title: 'Father\u2019s Day Gifts',
+//     blurb: 'Handcrafted pieces dad will actually keep \u2014 order by June 10 for delivery in time.',
+//     productIds: ['c-013', 'c-008', 's-002', 'c-000'],
+//   };
+// ─────────────────────────────────────────────────────────────
+const SEASONAL_EVENT = null;
+
+// --- Default featured products (shown when no event is active) ---
 const FEATURED_IDS = ['c-010', 'c-013', 'c-000', 'c-001', 's-002', 's-004'];
-const featured = FEATURED_IDS
+
+// Resolve which set + copy the section displays
+const usingSeasonal = !!SEASONAL_EVENT;
+const sectionEyebrow = usingSeasonal ? SEASONAL_EVENT.eyebrow : 'From the Workshop';
+const sectionTitle = usingSeasonal ? SEASONAL_EVENT.title : 'Featured Pieces';
+const sectionBlurb = usingSeasonal ? SEASONAL_EVENT.blurb : null;
+const sectionIds = usingSeasonal ? SEASONAL_EVENT.productIds : FEATURED_IDS;
+
+const featured = sectionIds
   .map((id) => products.find((p) => p.id === id))
   .filter(Boolean);
 
@@ -43,7 +67,7 @@ const badgeColor = (badge) =>
       </h1>
 
       <p class="reveal reveal-d2 hero-sub" style="font-size:clamp(15px,1.8vw,19px);line-height:1.65;max-width:46ch;margin-top:30px;font-weight:400;">
-        We design and build goods by hand — home pieces, custom fabrications, graphic prints, and apparel. Every product starts as an idea in our workshop and ends up in yours.
+        Made by hand between the desert and the coast. Furniture, signs, prints, and gifts — each piece cut, carved, and finished in our own workshop, then sent to yours.
       </p>
 
       <div class="reveal reveal-d3" style="display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;">
@@ -90,20 +114,25 @@ const badgeColor = (badge) =>
     </div>
   </section>
 
-  <!-- ═══ FEATURED PRODUCTS ═══ -->
-  <section class="section" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+  <!-- ═══ FEATURED / SEASONAL PRODUCTS ═══ -->
+  <section class="section" style={`border-bottom:1px solid rgba(255,255,255,0.05);${usingSeasonal ? 'background:linear-gradient(180deg,rgba(232,117,58,0.05),transparent 60%);' : ''}`}>
     <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:44px;">
-        <div>
-          <div class="label-sm reveal" style="margin-bottom:10px;">From the Workshop</div>
-          <h2 class="heading-lg reveal reveal-d1" style="margin:0;">Featured Pieces</h2>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+        <div style="max-width:58ch;">
+          <div class="label-sm reveal" style={`margin-bottom:10px;${usingSeasonal ? 'color:#E8753A;' : ''}`}>{sectionEyebrow}</div>
+          <h2 class="heading-lg reveal reveal-d1" style="margin:0;">{sectionTitle}</h2>
+          {sectionBlurb && (
+            <p class="reveal reveal-d2" style="font-size:14.5px;line-height:1.7;color:rgba(232,228,223,0.45);margin:14px 0 0;font-weight:300;">
+              {sectionBlurb}
+            </p>
+          )}
         </div>
-        <a href="/casa" class="reveal reveal-d2" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4A070;display:flex;align-items:center;gap:8px;text-decoration:none;">
+        <a href="/casa" class="reveal reveal-d2" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4A070;display:flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap;">
           Shop All <span style="font-size:15px;">&rarr;</span>
         </a>
       </div>
 
-      <div class="featured-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+      <div class="featured-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px;">
         {featured.map((product, i) => (
           <a
             href={href(product)}
