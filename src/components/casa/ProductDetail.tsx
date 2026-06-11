@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ProductOption {
   label: string;
@@ -22,11 +22,15 @@ interface Product {
   care?: string;
 }
 
-const PLACEHOLDER_REVIEWS = [
-  { author: 'Maria L.', rating: 5, date: 'Mar 2026', text: 'Beautifully made. The wood grain is gorgeous and you can tell it was crafted with real care. Arrived well-packaged too.' },
-  { author: 'James T.', rating: 5, date: 'Feb 2026', text: 'Bought this as a gift and they loved it. Quality is top-notch — feels substantial and looks even better in person.' },
-  { author: 'Sofia R.', rating: 4, date: 'Jan 2026', text: 'Great craftsmanship. Took a couple extra days to ship but well worth the wait. Would order again.' },
-];
+interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  text: string;
+  created_at: string;
+}
+
+const ACCENT = '#C4A070';
 
 export default function ProductDetail({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -35,9 +39,40 @@ export default function ProductDetail({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'reviews'>('details');
 
+  // Reviews state
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [rAuthor, setRAuthor] = useState('');
+  const [rRating, setRRating] = useState(0);
+  const [rHover, setRHover] = useState(0);
+  const [rText, setRText] = useState('');
+  const [rWebsite, setRWebsite] = useState(''); // honeypot
+  const [rSubmitting, setRSubmitting] = useState(false);
+  const [rSubmitted, setRSubmitted] = useState(false);
+  const [rError, setRError] = useState('');
+
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
   const optionPriceAdd = product.options?.find(o => o.value === selectedOption)?.priceAdd || 0;
   const totalPrice = product.price + optionPriceAdd;
+
+  useEffect(() => {
+    fetch(`/api/reviews?product_id=${encodeURIComponent(product.id)}`)
+      .then(res => res.json())
+      .then(data => setReviews(data.reviews || []))
+      .catch(() => setReviews([]))
+      .finally(() => setReviewsLoading(false));
+  }, [product.id]);
+
+  const reviewCount = reviews.length;
+  const avgRating = reviewCount
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount).toFixed(1)
+    : null;
+
+  const formatDate = (iso: string) => {
+    const d = new Date(iso.replace(' ', 'T') + 'Z');
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  };
 
   const addToCart = () => {
     if (typeof window !== 'undefined' && (window as any).addToCart) {
@@ -56,7 +91,49 @@ export default function ProductDetail({ product }: { product: Product }) {
     }
   };
 
-  <ProductReviews productId={product.id} accent="#C4A070" /> 
+  const submitReview = async () => {
+    setRError('');
+    if (!rAuthor.trim()) { setRError('Please add your name.'); return; }
+    if (rRating === 0) { setRError('Please pick a star rating.'); return; }
+    if (rText.trim().length < 10) { setRError('Please write at least a sentence.'); return; }
+
+    setRSubmitting(true);
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product.id,
+          author: rAuthor.trim(),
+          rating: rRating,
+          text: rText.trim(),
+          website: rWebsite,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setRError(data.error || 'Something went wrong. Please try again.');
+      } else {
+        setRSubmitted(true);
+        setShowForm(false);
+      }
+    } catch {
+      setRError('Could not submit. Check your connection and try again.');
+    } finally {
+      setRSubmitting(false);
+    }
+  };
+
+  const fieldLabel: React.CSSProperties = {
+    fontSize: 11, letterSpacing: 2, textTransform: 'uppercase',
+    color: 'rgba(26,26,26,0.35)', marginBottom: 8, fontWeight: 500, display: 'block',
+  };
+  const fieldInput: React.CSSProperties = {
+    width: '100%', padding: '11px 14px', borderRadius: 6,
+    border: '1px solid rgba(26,26,26,0.15)', background: '#fff',
+    fontFamily: "'Outfit', sans-serif", fontSize: 14, color: '#2A2520',
+    outline: 'none', boxSizing: 'border-box',
+  };
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px clamp(18px, 4vw, 40px) 80px' }}>
@@ -157,6 +234,28 @@ export default function ProductDetail({ product }: { product: Product }) {
             )}
           </div>
 
+          {/* Rating Summary — only shows once real reviews exist */}
+          {avgRating && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
+              <div style={{ display: 'flex', gap: 2 }}>
+                {[1,2,3,4,5].map(star => (
+                  <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#C4A070' : 'rgba(26,26,26,0.12)', fontSize: 16 }}>★</span>
+                ))}
+              </div>
+              <button
+                onClick={() => setActiveTab('reviews')}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'rgba(26,26,26,0.4)' }}
+              >
+                {avgRating} ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
+              </button>
+            </div>
+          )}
+
+          {product.description && (
+            <p style={{ fontSize: 14.5, lineHeight: 1.75, color: 'rgba(26,26,26,0.55)', margin: '0 0 28px', maxWidth: '52ch' }}>
+              {product.description}
+            </p>
+          )}
 
           {/* Options */}
           {product.options && product.options.length > 0 && (
@@ -273,7 +372,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 transition: 'all 0.2s',
               }}
             >
-              {tab === 'details' ? 'Details & Care' : `Reviews (${PLACEHOLDER_REVIEWS.length})`}
+              {tab === 'details' ? 'Details & Care' : `Reviews${reviewCount ? ` (${reviewCount})` : ''}`}
             </button>
           ))}
         </div>
@@ -311,42 +410,173 @@ export default function ProductDetail({ product }: { product: Product }) {
 
         {activeTab === 'reviews' && (
           <div style={{ maxWidth: 700 }}>
-            {/* Rating Overview */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32,
-              padding: '20px 24px', borderRadius: 8,
-              border: '1px solid rgba(26,26,26,0.06)', background: 'rgba(196,160,112,0.03)',
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: '#2A2520', lineHeight: 1 }}>{avgRating}</div>
-                <div style={{ display: 'flex', gap: 2, justifyContent: 'center', marginTop: 4 }}>
-                  {[1,2,3,4,5].map(star => (
-                    <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#C4A070' : 'rgba(26,26,26,0.12)', fontSize: 14 }}>★</span>
-                  ))}
-                </div>
-                <div style={{ fontSize: 11, color: 'rgba(26,26,26,0.35)', marginTop: 4 }}>{PLACEHOLDER_REVIEWS.length} reviews</div>
-              </div>
-              <div style={{ flex: 1 }}>
-                {[5,4,3,2,1].map(stars => {
-                  const count = PLACEHOLDER_REVIEWS.filter(r => r.rating === stars).length;
-                  const pct = (count / PLACEHOLDER_REVIEWS.length) * 100;
-                  return (
-                    <div key={stars} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                      <span style={{ fontSize: 11, color: 'rgba(26,26,26,0.35)', width: 14, textAlign: 'right' }}>{stars}</span>
-                      <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(26,26,26,0.06)', overflow: 'hidden' }}>
-                        <div style={{ width: `${pct}%`, height: '100%', borderRadius: 3, background: '#C4A070', transition: 'width 0.3s' }} />
-                      </div>
-                      <span style={{ fontSize: 11, color: 'rgba(26,26,26,0.25)', width: 20 }}>{count}</span>
+
+            {/* Header row: summary + write button */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>
+              {avgRating ? (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 20,
+                  padding: '20px 24px', borderRadius: 8,
+                  border: '1px solid rgba(26,26,26,0.06)', background: 'rgba(196,160,112,0.03)',
+                  flex: '1 1 320px',
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 42, color: '#2A2520', lineHeight: 1 }}>{avgRating}</div>
+                    <div style={{ display: 'flex', gap: 2, justifyContent: 'center', marginTop: 4 }}>
+                      {[1,2,3,4,5].map(star => (
+                        <span key={star} style={{ color: star <= Math.round(Number(avgRating)) ? '#C4A070' : 'rgba(26,26,26,0.12)', fontSize: 14 }}>★</span>
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
+                    <div style={{ fontSize: 11, color: 'rgba(26,26,26,0.35)', marginTop: 4 }}>{reviewCount} review{reviewCount !== 1 ? 's' : ''}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    {[5,4,3,2,1].map(stars => {
+                      const count = reviews.filter(r => r.rating === stars).length;
+                      const pct = reviewCount ? (count / reviewCount) * 100 : 0;
+                      return (
+                        <div key={stars} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                          <span style={{ fontSize: 11, color: 'rgba(26,26,26,0.35)', width: 14, textAlign: 'right' }}>{stars}</span>
+                          <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(26,26,26,0.06)', overflow: 'hidden' }}>
+                            <div style={{ width: `${pct}%`, height: '100%', borderRadius: 3, background: '#C4A070', transition: 'width 0.3s' }} />
+                          </div>
+                          <span style={{ fontSize: 11, color: 'rgba(26,26,26,0.25)', width: 20 }}>{count}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <p style={{ fontSize: 14, color: 'rgba(26,26,26,0.4)', margin: 0 }}>
+                  {reviewsLoading ? 'Loading reviews…' : 'No reviews yet — be the first to share one.'}
+                </p>
+              )}
+
+              {!rSubmitted && !showForm && (
+                <button
+                  onClick={() => setShowForm(true)}
+                  style={{
+                    padding: '11px 22px', borderRadius: 6, cursor: 'pointer',
+                    border: `1.5px solid ${ACCENT}`, background: 'transparent', color: '#2A2520',
+                    fontFamily: "'Outfit', sans-serif", fontSize: 12, fontWeight: 600,
+                    letterSpacing: 1, textTransform: 'uppercase', whiteSpace: 'nowrap',
+                  }}
+                >
+                  Write a Review
+                </button>
+              )}
             </div>
 
-            {PLACEHOLDER_REVIEWS.map((review, i) => (
-              <div key={i} style={{
+            {/* Thank-you state */}
+            {rSubmitted && (
+              <div style={{
+                padding: '16px 20px', borderRadius: 8, marginBottom: 28,
+                background: 'rgba(196,160,112,0.08)', border: `1px solid ${ACCENT}40`,
+                fontSize: 14, color: 'rgba(26,26,26,0.65)', lineHeight: 1.6,
+              }}>
+                Thanks for your review! It'll appear here once it's been checked over — usually within a day.
+              </div>
+            )}
+
+            {/* Submission form */}
+            {showForm && !rSubmitted && (
+              <div style={{
+                padding: '22px 22px 24px', borderRadius: 10, marginBottom: 32,
+                background: 'rgba(26,26,26,0.025)', border: '1px solid rgba(26,26,26,0.08)',
+              }}>
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Rating</span>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <button
+                        key={star}
+                        onClick={() => setRRating(star)}
+                        onMouseEnter={() => setRHover(star)}
+                        onMouseLeave={() => setRHover(0)}
+                        aria-label={`${star} star${star > 1 ? 's' : ''}`}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer', padding: 2,
+                          fontSize: 26, lineHeight: 1,
+                          color: star <= (rHover || rRating) ? ACCENT : 'rgba(26,26,26,0.15)',
+                          transition: 'color 0.15s',
+                        }}
+                      >★</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Name</span>
+                  <input
+                    type="text"
+                    value={rAuthor}
+                    onChange={e => setRAuthor(e.target.value)}
+                    placeholder="First name, last initial — e.g. Maria G."
+                    maxLength={60}
+                    style={fieldInput}
+                  />
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <span style={fieldLabel}>Your Review</span>
+                  <textarea
+                    value={rText}
+                    onChange={e => setRText(e.target.value)}
+                    placeholder="How's the quality? Was it a gift? Would you order again?"
+                    maxLength={1200}
+                    rows={4}
+                    style={{ ...fieldInput, resize: 'vertical', minHeight: 90 }}
+                  />
+                </div>
+
+                {/* Honeypot — hidden from real users, catches bots */}
+                <input
+                  type="text"
+                  value={rWebsite}
+                  onChange={e => setRWebsite(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
+                />
+
+                {rError && (
+                  <p style={{ fontSize: 13, color: '#C0392B', margin: '0 0 14px' }}>{rError}</p>
+                )}
+
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button
+                    onClick={submitReview}
+                    disabled={rSubmitting}
+                    style={{
+                      padding: '12px 28px', borderRadius: 6, border: 'none',
+                      background: rSubmitting ? 'rgba(26,26,26,0.3)' : '#2A2520', color: '#FAF7F1',
+                      cursor: rSubmitting ? 'default' : 'pointer',
+                      fontFamily: "'Outfit', sans-serif", fontSize: 12.5, fontWeight: 600,
+                      letterSpacing: 1.5, textTransform: 'uppercase',
+                    }}
+                  >
+                    {rSubmitting ? 'Sending…' : 'Submit Review'}
+                  </button>
+                  <button
+                    onClick={() => { setShowForm(false); setRError(''); }}
+                    style={{
+                      padding: '12px 20px', borderRadius: 6, cursor: 'pointer',
+                      border: '1px solid rgba(26,26,26,0.15)', background: 'transparent',
+                      color: 'rgba(26,26,26,0.5)', fontFamily: "'Outfit', sans-serif",
+                      fontSize: 12.5, fontWeight: 500, letterSpacing: 1, textTransform: 'uppercase',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Review list */}
+            {reviews.map((review, i) => (
+              <div key={review.id} style={{
                 padding: '20px 0',
-                borderBottom: i < PLACEHOLDER_REVIEWS.length - 1 ? '1px solid rgba(26,26,26,0.06)' : 'none',
+                borderBottom: i < reviews.length - 1 ? '1px solid rgba(26,26,26,0.06)' : 'none',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -367,7 +597,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                       </div>
                     </div>
                   </div>
-                  <span style={{ fontSize: 11.5, color: 'rgba(26,26,26,0.25)' }}>{review.date}</span>
+                  <span style={{ fontSize: 11.5, color: 'rgba(26,26,26,0.25)' }}>{formatDate(review.created_at)}</span>
                 </div>
                 <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(26,26,26,0.55)', margin: 0 }}>
                   {review.text}
