@@ -76,7 +76,8 @@ export default function CartPage() {
             }}>
               <div style={{
                 width: 64, height: 64, borderRadius: 6,
-                background: 'rgba(196,160,112,0.06)', border: '1px solid rgba(255,255,255,0.04)',
+                background: `url(${item.image}) center/cover no-repeat, rgba(196,160,112,0.06)`,
+                border: '1px solid rgba(255,255,255,0.04)',
                 flexShrink: 0,
               }} />
               <div style={{ flex: 1 }}>
